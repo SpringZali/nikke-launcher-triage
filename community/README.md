@@ -32,7 +32,7 @@ We checked only public metadata through the GitHub API on 2026-11-04. We did not
 - The repository `MotherSphere/NIKKE-Launcher-Check` exists, was created on Nov 3 (very new) and is licensed GPL-3.0.
 - Release v0.4.0 points at commit `0bc79c9`, which GitHub marks as signature-verified. The tag points at the same commit.
 - GitHub lists the Windows asset's SHA-256 digest as `152199a0afaa483e1a6b9b27a6568731760867022078aa85a075064a7f1d314f`, which equals the value the review gives.
-- The repository has **newer commits than v0.4.0** (Nov 4, 11:26 GMT). According to their commit messages, they change how the scanner reads compressed LevelDB data and which downloads it counts. The review does not cover them.
+- The repository has **newer commits than v0.4.0** (Nov 4, 11:26 GMT). According to their commit messages, they change how the scanner reads compressed LevelDB data and which downloads it counts. The review does not cover them. As of Nov 4, 16:03 GMT the latest release is v0.5.1 (published 13:39 GMT, after v0.4.1 and v0.5.0), and MotherSphere's report now links the scanner at the top. The review covers none of those releases.
 - The two reports match the manifest. The manifest does not cover the notes file: only its "SENDING" section was removed from this copy, nothing else in it was changed.
 
 Found a problem? Open an issue with a source.
