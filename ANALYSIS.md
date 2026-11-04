@@ -13,7 +13,7 @@ Labels: **VERIFIED** = I reproduced it from a public source. **CORROBORATED** = 
 
 ## About the author and the report
 
-- GitHub account created 2025-10-02, 70 public repositories, 21 followers, 2 public gists. Not a throwaway account.
+- GitHub account created 2025-10-02, 70 public repositories, 21 followers, 2 public gists. Not a brand-new account.
 - 12 public revisions with visible corrections (for example the withdrawn `onominan.tmp` marker and the `creds` correction). The "Reinstalling Windows is the safest option" line is identical in all 12 revisions, and sits under "If you are infected".
 - Several commenters say they used AI assistants to analyse their own machines. That does not change whether a claim is true. Hashes, timestamps and log lines can be checked either way.
 
