@@ -63,7 +63,7 @@ powershell -NoProfile -ExecutionPolicy Bypass -File .\Check-NikkeLauncher.ps1
 ## What not to do
 
 - Do not uninstall or wipe **before** checking. It destroys the evidence.
-- Do not run "removal tools" or scripts from strangers. Fake "NIKKE fix" repositories are an obvious next scam. This repo has no binaries, only text you can read.
+- Do not run "removal tools" or scripts from strangers. Fake "NIKKE fix" repositories are a likely next scam. This repo has no binaries, only text you can read.
 - Do not tell people it is a hoax, and do not tell them "you are safe". Neither is established. Do not tell them everything is destroyed either.
 
 ## Is the official CDN clean now?
@@ -74,7 +74,7 @@ Between 09:00 and 09:15 GMT on 2026-11-04 all four files served by the official 
 
 - **"I already uninstalled. Am I safe?"** You cannot tell from logs, because the uninstaller erased them. Check the persistence items (steps 2 and 3), do the cheap precautions, and consider the SRUM check.
 - **"Is changing my passwords enough?"** If the agent ran: it protects your accounts, but not the PC, because the operator could have started other programs. Only a reinstall gives certainty.
-- **"Is it a hoax?"** No. The publisher confirms the tampering concern, and the registry, certificate and CDN details in the report match independent checks. The details of the payload rest on one researcher plus community reports, and have not been confirmed by SHIFT UP or a security vendor.
+- **"Is it a hoax?"** The evidence says no. The publisher itself reports an anomaly consistent with tampering, and the registry, certificate and CDN details in the report match independent checks. The details of the payload rest on one researcher plus community reports, and have not been confirmed by SHIFT UP or a security vendor.
 - **"Why not just say wipe everything?"** Because for people with no sign of the agent, the evidence does not support it, and wiping first erases the evidence. For confirmed cases the report's author, and this guide, say a reinstall is the only certain fix.
 
 ## Still unknown
