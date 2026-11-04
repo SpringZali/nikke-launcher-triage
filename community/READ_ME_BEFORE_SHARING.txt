@@ -21,8 +21,3 @@ The forensic report's E1–E7 evidence hashes refer to the original
 preserved supporting files, not to files included in this public package.
 This distribution does not itself include full forensic artifacts or a
 disk image. A recipient can request separately redacted evidence if needed.
-
-SENDING
-Attach both Markdown reports together (or this ZIP). If sending to an
-organization that cannot open Markdown, export the reports to PDF locally,
-but preserve the Markdown originals and manifest for integrity.
