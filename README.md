@@ -6,15 +6,15 @@
 > [!NOTE]
 > Community guide. **Not an official statement.** Not affiliated with SHIFT UP, Level Infinite or Tencent, and not professional incident-response advice. It builds on [MotherSphere's technical report](https://gist.github.com/MotherSphere/d6c049a09ba8ac3085c51ee9df24a4e5), the source for almost every technical detail here. Prepared with AI assistance. Every check is reproducible: see [ANALYSIS.md](ANALYSIS.md).
 
-**Last updated: 2026-11-04, 12:50 GMT**. Things are still changing, so look at the date. Changes are listed in the [changelog](#changelog).
+**Last updated: 2026-11-04, 16:10 GMT**. Things are still changing, so look at the date. Changes are listed in the [changelog](#changelog).
 
 | Status board | Now | Checked (GMT) |
 |---|---|---|
-| Official CDN files | All four byte-identical to the known-clean versions, on every server tested | Nov 4, 12:38 |
-| Publisher statements | First notice posted Nov 4, 03:14. At 08:07, SHIFT UP's Kim Hyung-tae added an apology: they are working with Level Infinite on a fundamental solution and preparing follow-up measures. No scope or advice for players yet | Nov 4, 12:42 |
-| Technical report | Newest revision Nov 4, 12:17 (13 revisions). 136 comments from 65 people. It now says some CDN servers served the modified `FeedList` until Nov 4, 03:21 | Nov 4, 12:44 |
-| Stolen data being misused | No such report found in the report's comments (absence of reports, not proof) | Nov 4, 12:44 |
-| Attacker's server | Reported offline since Nov 3, 18:31 (not verified here) | Nov 4, 12:44 |
+| Official CDN files | All four byte-identical to the known-clean versions, on every server tested | Nov 4, 15:37 |
+| Publisher statements | First notice posted Nov 4, 03:14. At 08:07, SHIFT UP's Kim Hyung-tae added an apology: they are working with Level Infinite on a fundamental solution and preparing follow-up measures. No scope or advice for players yet | Nov 4, 15:40 |
+| Technical report | Newest revision Nov 4, 14:30 (18 revisions). 149 comments from 72 people. It links its author's scanner at the top, which this guide has not reviewed, and is now translated into 15 languages, including Russian | Nov 4, 16:03 |
+| Stolen data being misused | No such report found in the report's comments (absence of reports, not proof) | Nov 4, 16:03 |
+| Attacker's server | Reported offline since Nov 3, 18:31 (not verified here) | Nov 4, 16:03 |
 
 ## Contents
 
@@ -68,15 +68,15 @@ Do this **before** you uninstall, delete or reinstall anything, and with the lau
 1. Open `NIKKE\Launcher\intl_service\debug.log` in Notepad and search for `k2f_chan`.
    - Found: **RED**. Not found proves little: LevelDB can move old records into compressed files that a text search cannot read.
    - Not found: look at the first date in the file. The log has no year, and lines look like `[1031/211231.145:...]`, which is Oct 31. If it starts after your first launch in the window, it does not cover everything. If the file does not exist, see **GREY**.
-2. In `regedit`, look for `HKEY_CURRENT_USER\Software\Classes\CLSID\{E77CC89B-7401-4C04-8CED-149DB35ADD04}`. If it exists, even with an empty value: **RED**. The same CLSID under `HKEY_LOCAL_MACHINE` is normal Windows. Ignore that one.
-3. In File Explorer open `%LOCALAPPDATA%\Google\Chrome\User Data\PlatformExperienceHelper\`. A subfolder named with 64 hex characters that contains `platform_experience_helper.dll`: **RED**. The folder itself is normal Chrome. The report says the DLL can be installed even without Chrome.
+2. In `regedit`, look for `HKEY_CURRENT_USER\Software\Classes\CLSID\{E77CC89B-7401-4C04-8CED-149DB35ADD04}`. If it exists, even with an empty value: **RED**. The same CLSID under `HKEY_LOCAL_MACHINE` is normal Windows. Ignore that one. The report's author says the agent's own uninstall clears only the key's value and leaves the key, so no key means the Chrome DLL was never installed, unless someone deleted the key by hand.
+3. In File Explorer open `%LOCALAPPDATA%\Google\Chrome\User Data\PlatformExperienceHelper\`. A subfolder named with 64 hex characters that contains `platform_experience_helper.dll`: **RED**. The folder itself is normal Chrome. The report says the DLL can be installed even without Chrome. Its author adds that it only ever goes into this Chrome folder, never into Edge or Brave folders.
 4. Search the files in `%APPDATA%\nikke_launcher\tbs_cache\Local Storage\leveldb\` for the text `k2f.agent`. Found: **RED**. Not found proves little: LevelDB can move old records into compressed files that a text search cannot read.
 5. If you run Pi-hole, NextDNS or look at router logs: a lookup of `insightjs.com` means the loader ran (**YELLOW**). A lookup of `analytics.insightjs.com` suggests the agent stage was reached. A DNS log can miss lookups, so a clean DNS log is not proof.
 6. Did the launcher itself show a security warning? That is the loader's fallback page, not proof of infection (see the myths in section 5). It counts as **YELLOW**: the modified script loaded. It says nothing about whether the agent ran, and not seeing it proves nothing either.
 
 </details>
 
-**Prefer a script?** [`Check-NikkeLauncher.ps1`](Check-NikkeLauncher.ps1) does steps 1 to 4 plus a few extras. It is plain PowerShell, offline and read-only, and short enough to read in five minutes. Read it first. Do not run scripts you have not read, including this one.
+**Prefer a script?** [`Check-NikkeLauncher.ps1`](Check-NikkeLauncher.ps1) does steps 1 to 4 plus a few extras. It is plain PowerShell, offline and read-only, and short enough to read in five minutes. Read it first. Do not run scripts you have not read, including this one. The report now also links its author's scanner, [NIKKE Launcher Check](https://github.com/MotherSphere/NIKKE-Launcher-Check), with a download. This guide has not reviewed its current release (v0.5.1 at 16:03 GMT), and the only review published here covers v0.4.0 ([community/](community/README.md)). The manual check above needs no download.
 
 ```
 powershell -NoProfile -ExecutionPolicy Bypass -File .\Check-NikkeLauncher.ps1
@@ -151,7 +151,7 @@ Short replies for people asking in threads and chats. Each one fits in a post.
 - **"Is the launcher safe to open now?"** The official files look clean now, but SHIFT UP has not given an all-clear. Wait for it, and delete `tbs_cache` before you open the launcher again. https://github.com/SpringZali/nikke-launcher-triage
 ## 6. What is known, and how well
 
-**VERIFIED** = reproduced from a public source. **CORROBORATED** = several independent reports agree. **REPORTED** = one source. Full table with 28 claims and how to reproduce each: [ANALYSIS.md](ANALYSIS.md).
+**VERIFIED** = reproduced from a public source. **CORROBORATED** = several independent reports agree. **REPORTED** = one source. Full table with 30 claims and how to reproduce each: [ANALYSIS.md](ANALYSIS.md).
 
 | Fact | How well established | Source |
 |---|---|---|
@@ -163,7 +163,7 @@ Short replies for people asking in threads and chats. Each one fits in a post.
 | A remote-control agent was delivered to some launches (`k2f_chan` in the log) | **CORROBORATED** | MotherSphere's report and many independent comments |
 | What the agent can do: run commands, read files, take screenshots, collect saved credentials | **REPORTED** | Static analysis by one researcher |
 | Chrome-helper persistence | **REPORTED**, not universal | Several victims. Others with the agent have none |
-| Stolen data is being misused | **NO REPORTS FOUND** | Keyword scan of 136 comments |
+| Stolen data is being misused | **NO REPORTS FOUND** | Keyword scan of 149 comments |
 | One detailed community case study (the agent ran on three days) also found no proof of theft or misuse | **REPORTED** | [Community report](community/INCIDENT_FORENSIC_REPORT_PUBLIC.md) |
 | How the attacker got write access to the CDN | **UNKNOWN** | Not yet explained |
 
@@ -212,6 +212,7 @@ As of Nov 4, the notice says the scope is under investigation and that guidance 
 
 ## Changelog
 
+- **2026-11-04, 16:10, v2.6.** The report's newest revision now recommends its author's scanner at the top. Added a note that this guide has not reviewed its current release, what the author says about the registry key and the DLL folder, a link to the report's Russian translation, and refreshed the status board and the counts.
 - **2026-11-04, 12:50, v2.5.** The exposure window now ends on Nov 4 at 03:20 GMT instead of Nov 3: the report's newest revision says some CDN servers served the modified `FeedList` until then. Added the reset advice of the report's author (a reset with "Remove everything" counts, "Keep my files" does not), two timeline rows, and refreshed the status board and the counts. Removed the "SENDING" section from the community notes file, because it does not apply to a public repository.
 - **2026-11-04, 11:42, v2.4.** Added the [community reports](community/README.md) (published unchanged) with a credit, a row in the table of what is known, and a caveat on the LevelDB search in step 4.
 - **2026-11-04, 11:13, v2.3.** Added SHIFT UP's second statement (Kim Hyung-tae, 08:07 GMT) to the status board, timeline and sources.
@@ -222,7 +223,7 @@ As of Nov 4, the notice says the scope is under investigation and that guidance 
 
 ## Sources and credit
 
-- [MotherSphere's report](https://gist.github.com/MotherSphere/d6c049a09ba8ac3085c51ee9df24a4e5) and the players who shared their logs and network records in its comments. This guide would not exist without them.
+- [MotherSphere's report](https://gist.github.com/MotherSphere/d6c049a09ba8ac3085c51ee9df24a4e5) and the players who shared their logs and network records in its comments. This guide would not exist without them. The report is also available in 15 languages, including [Russian](https://gist.github.com/MotherSphere/d6c049a09ba8ac3085c51ee9df24a4e5#file-nikke-pc-launcher-compromise_ru-md). We have not checked the translations.
 - Official notices, Nov 4: [NIKKE English account](https://x.com/NIKKE_en/status/2117817602659770434) (03:13 GMT) and [NIKKE Japan account](https://x.com/NIKKE_japan/status/2117817740555956289) (03:14 GMT)
 - [Kim Hyung-tae of SHIFT UP, statement of Nov 4](https://x.com/jamm3rd/status/2117891546322252242) (08:07 GMT)
 - [Inven Global](https://www.invenglobal.com/articles/28112/goddess-of-victory-nikke-pc-launcher-allegedly-compromised) and Japanese coverage: [Inside Games](https://www.inside-games.jp/article/2026/11/04/190338.html), [Mynavi](https://news.mynavi.jp/article/20261104-5254830/), [Automaton](https://automaton-media.com/articles/newsjp/20261104-477333/)
