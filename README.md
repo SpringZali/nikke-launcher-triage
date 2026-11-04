@@ -6,15 +6,15 @@
 > [!NOTE]
 > Community guide. **Not an official statement.** Not affiliated with SHIFT UP, Level Infinite or Tencent, and not professional incident-response advice. It builds on [MotherSphere's technical report](https://gist.github.com/MotherSphere/d6c049a09ba8ac3085c51ee9df24a4e5), the source for almost every technical detail here. Prepared with AI assistance. Every check is reproducible: see [ANALYSIS.md](ANALYSIS.md).
 
-**Last updated: 2026-11-04, 11:42 GMT**. Things are still changing, so look at the date. Changes are listed in the [changelog](#changelog).
+**Last updated: 2026-11-04, 12:50 GMT**. Things are still changing, so look at the date. Changes are listed in the [changelog](#changelog).
 
 | Status board | Now | Checked (GMT) |
 |---|---|---|
-| Official CDN files | All four byte-identical to the known-clean versions, on every server tested | Nov 4, 09:56 |
-| Publisher statements | First notice posted Nov 4, 03:14. At 08:07, SHIFT UP's Kim Hyung-tae added an apology: they are working with Level Infinite on a fundamental solution and preparing follow-up measures. No scope or advice for players yet | Nov 4, 11:13 |
-| Technical report | Newest revision Nov 4, 01:55. 127 comments from 62 people | Nov 4, 09:56 |
-| Stolen data being misused | No such report found in the report's comments (absence of reports, not proof) | Nov 4, 09:51 |
-| Attacker's server | Reported offline since Nov 3, 18:31 (not verified here) | Nov 4, 09:56 |
+| Official CDN files | All four byte-identical to the known-clean versions, on every server tested | Nov 4, 12:38 |
+| Publisher statements | First notice posted Nov 4, 03:14. At 08:07, SHIFT UP's Kim Hyung-tae added an apology: they are working with Level Infinite on a fundamental solution and preparing follow-up measures. No scope or advice for players yet | Nov 4, 12:42 |
+| Technical report | Newest revision Nov 4, 12:17 (13 revisions). 136 comments from 65 people. It now says some CDN servers served the modified `FeedList` until Nov 4, 03:21 | Nov 4, 12:44 |
+| Stolen data being misused | No such report found in the report's comments (absence of reports, not proof) | Nov 4, 12:44 |
+| Attacker's server | Reported offline since Nov 3, 18:31 (not verified here) | Nov 4, 12:44 |
 
 ## Contents
 
@@ -34,7 +34,7 @@
 
 ```mermaid
 flowchart TD
-    A["Did you start the PC launcher between Sep 27 and Nov 3?"] -->|"No, or mobile only"| Z["Not exposed. Nothing to do."]
+    A["Did you start the PC launcher between Sep 27 and Nov 4, 03:20 GMT?"] -->|"No, or mobile only"| Z["Not exposed. Nothing to do."]
     A -->|"Yes"| B["Close the launcher. Do not open it. Do not uninstall yet."]
     B --> C["Run the 5-minute check (section 3)"]
     C --> D{"What did it find?"}
@@ -44,7 +44,7 @@ flowchart TD
     D -->|"Nothing found"| N["GREEN: wait for the all-clear"]
 ```
 
-Why Sep 27? Four official launcher script files were modified that day, so the first stage (the "loader") was in place from then. The second stage, a remote-control program called the "agent", is first reported on Oct 23. The report covers the PC launcher on Windows and on Linux / Steam Deck (Proton). Mobile was not analysed.
+Why Sep 27? Four official launcher script files were modified that day, so the first stage (the "loader") was in place from then. The second stage, a remote-control program called the "agent", is first reported on Oct 23. The report covers the PC launcher on Windows and on Linux / Steam Deck (Proton). Mobile was not analysed. Why Nov 4, 03:20 GMT? The report says some CDN servers kept serving the modified `FeedList` file until Nov 4 between 03:12 and 03:21 GMT. That covers the four servers it checked, and others were not checked. So a launch in the early hours of Nov 4 GMT, which is already the morning of Nov 4 in Japan and Korea, still counts.
 
 **Being exposed is not the same as being infected.** According to the report, the attack code was delivered on only some launches (one machine got it on 3 of about 19). That is why the check matters.
 
@@ -93,7 +93,7 @@ powershell -NoProfile -ExecutionPolicy Bypass -File .\Check-NikkeLauncher.ps1
 | **YELLOW**: loader traces (`insightjs` in cache, DNS or the launcher's download logs, or a security warning shown inside the launcher) but no sign of the agent | The first stage ran. Nothing shows the agent did. | Delete `%APPDATA%\nikke_launcher\tbs_cache`, do the [precautions](#precautions-10-minutes), keep watching your accounts. A wipe is not warranted by this alone. |
 | **GREY**: no log and no launcher data left (uninstalled or reinstalled), but you launched in the window | You cannot tell. | Treat it as "possibly exposed": do the [precautions](#precautions-10-minutes). Absence of evidence alone does not justify a wipe, but reconsider if the PC holds high-value secrets. Evidence that survives an uninstall: Windows' SRUM network records (below). |
 | **GREEN**: log present, covers your launches, no hits anywhere | No sign the agent ran. | Delete `tbs_cache` before the next launch and wait for the official all-clear. |
-| You never started the PC launcher between Sep 27 and Nov 3 | Not exposed. | Nothing to do. |
+| You never started the PC launcher between Sep 27 and Nov 4, 03:20 GMT | Not exposed. | Nothing to do. |
 
 ### RED in detail
 
@@ -102,7 +102,7 @@ powershell -NoProfile -ExecutionPolicy Bypass -File .\Check-NikkeLauncher.ps1
 3. Sign out of **all sessions** everywhere. Stolen browser cookies work without your password.
 4. Revoke and regenerate API tokens and SSH keys. Move crypto funds to a new wallet with a new seed phrase.
 5. Remove the persistence: delete the HKCU registry key, restart Windows, then delete the 64-hex folder. Do not delete the whole `PlatformExperienceHelper` folder, which is normal Chrome.
-6. **Reinstalling Windows is the only way to be certain**, because nothing logs what an operator ran. Whether you do it depends on what the PC holds (wallets, keys, work access). Keep your other drives, but check programs and scripts changed since Oct 23 before running them. A System Restore point is not a clean state.
+6. **Reinstalling Windows is the only way to be certain**, because nothing logs what an operator ran. Whether you do it depends on what the PC holds (wallets, keys, work access). Keep your other drives, but check programs and scripts changed since Oct 23 before running them. A System Restore point is not a clean state. A clean install and Reset this PC with "Remove everything" both count. "Keep my files" does not, because it keeps your user folders, where the Chrome DLL lives. Do not restore a full backup of that PC made after Sep 27. This is the advice of the report's author in its comments, not an official source.
 
 ### Precautions (10 minutes)
 
@@ -151,7 +151,7 @@ Short replies for people asking in threads and chats. Each one fits in a post.
 - **"Is the launcher safe to open now?"** The official files look clean now, but SHIFT UP has not given an all-clear. Wait for it, and delete `tbs_cache` before you open the launcher again. https://github.com/SpringZali/nikke-launcher-triage
 ## 6. What is known, and how well
 
-**VERIFIED** = reproduced from a public source. **CORROBORATED** = several independent reports agree. **REPORTED** = one source. Full table with 26 claims and how to reproduce each: [ANALYSIS.md](ANALYSIS.md).
+**VERIFIED** = reproduced from a public source. **CORROBORATED** = several independent reports agree. **REPORTED** = one source. Full table with 28 claims and how to reproduce each: [ANALYSIS.md](ANALYSIS.md).
 
 | Fact | How well established | Source |
 |---|---|---|
@@ -163,7 +163,7 @@ Short replies for people asking in threads and chats. Each one fits in a post.
 | A remote-control agent was delivered to some launches (`k2f_chan` in the log) | **CORROBORATED** | MotherSphere's report and many independent comments |
 | What the agent can do: run commands, read files, take screenshots, collect saved credentials | **REPORTED** | Static analysis by one researcher |
 | Chrome-helper persistence | **REPORTED**, not universal | Several victims. Others with the agent have none |
-| Stolen data is being misused | **NO REPORTS FOUND** | Keyword scan of 127 comments |
+| Stolen data is being misused | **NO REPORTS FOUND** | Keyword scan of 136 comments |
 | One detailed community case study (the agent ran on three days) also found no proof of theft or misuse | **REPORTED** | [Community report](community/INCIDENT_FORENSIC_REPORT_PUBLIC.md) |
 | How the attacker got write access to the CDN | **UNKNOWN** | Not yet explained |
 
@@ -183,6 +183,8 @@ Short replies for people asking in threads and chats. Each one fits in a post.
 | Nov 3, 18:31 | Attacker's server stops answering | reported |
 | Nov 3, 20:19 | `FeedList` re-published | verified |
 | Nov 3, up to 22:26 | Two CDN servers still serve the modified `FeedList` | reported, matches [Inven Global](https://www.invenglobal.com/articles/28112/goddess-of-victory-nikke-pc-launcher-allegedly-compromised) |
+| Nov 4, 00:48 | One CDN server (`43.175.139.78`, `na-webassets`) still serves the modified `FeedList`, seen in a public urlscan.io scan | reported |
+| Nov 4, 03:12 to 03:21 | The four servers the report checked take the clean `FeedList`, most likely a purge | reported |
 | Nov 4, 03:14 | Publisher's first public statement | verified |
 | Nov 4, 08:07 | SHIFT UP's Kim Hyung-tae apologises: working with Level Infinite on a fundamental solution, preparing follow-up measures | verified |
 | Nov 4, 09:56 | All four files clean on every server tested | verified |
@@ -210,6 +212,7 @@ As of Nov 4, the notice says the scope is under investigation and that guidance 
 
 ## Changelog
 
+- **2026-11-04, 12:50, v2.5.** The exposure window now ends on Nov 4 at 03:20 GMT instead of Nov 3: the report's newest revision says some CDN servers served the modified `FeedList` until then. Added the reset advice of the report's author (a reset with "Remove everything" counts, "Keep my files" does not), two timeline rows, and refreshed the status board and the counts. Removed the "SENDING" section from the community notes file, because it does not apply to a public repository.
 - **2026-11-04, 11:42, v2.4.** Added the [community reports](community/README.md) (published unchanged) with a credit, a row in the table of what is known, and a caveat on the LevelDB search in step 4.
 - **2026-11-04, 11:13, v2.3.** Added SHIFT UP's second statement (Kim Hyung-tae, 08:07 GMT) to the status board, timeline and sources.
 - **2026-11-04, 11:00, v2.2.** Added the security-warning nuance: a YELLOW example, manual check step 6, a myth row and a short answer.
