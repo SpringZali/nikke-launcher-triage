@@ -7,14 +7,14 @@
 > Community guide. **Not an official statement.** Not affiliated with SHIFT UP, Level Infinite or Tencent, and not professional incident-response advice. It builds on [MotherSphere's technical report](https://gist.github.com/MotherSphere/d6c049a09ba8ac3085c51ee9df24a4e5), the source for almost every technical detail here. Prepared with AI assistance. Every check is reproducible: see [ANALYSIS.md](ANALYSIS.md).
 
 > [!IMPORTANT]
-> **Official guidance is out (Nov 4, 23:00 to 23:07 GMT).** Level Infinite confirms that a third party tampered with launcher files, says the current launcher version is safe, and says that from Nov 5, 08:00 JST (Nov 4, 23:00 GMT) the official PC client scans for the malware and offers to remove it. Details: [section 2](#official-guidance-nov-4-2300-gmt). The official scan removes the malware's logs, DLLs and registry data, so if you want to keep your evidence, **copy `debug.log` first** (our suggestion, not an official step).
+> **Official guidance is out (Nov 4, 23:00 to 23:07 GMT).** Level Infinite confirms that a third party tampered with launcher files, says the current launcher version is safe, and says that from Nov 5, 08:00 JST (Nov 4, 23:00 GMT) the official PC client scans for the malware and offers to remove it. The publisher's manual check guide is out too (23:10 GMT). Details: [section 2](#official-guidance-nov-4-2300-gmt). The official scan removes the malware's logs, DLLs and registry data, so if you want to keep your evidence, **copy `debug.log` first** (our suggestion, not an official step).
 
-**Last updated: 2026-11-04, 23:13 GMT**. Things are still changing, so look at the date. Changes are listed in the [changelog](#changelog).
+**Last updated: 2026-11-04, 23:32 GMT**. Things are still changing, so look at the date. Changes are listed in the [changelog](#changelog).
 
 | Status board | Now | Checked (GMT) |
 |---|---|---|
 | Official CDN files | All four byte-identical to the known-clean versions, on every server tested | Nov 4, 23:07 |
-| Publisher statements | Nov 4, 23:00 to 23:07: Level Infinite apologises and posts a follow-up measures notice. It confirms that a third party tampered with launcher files, says PCs and account data may have been exposed and the scope is still being investigated, calls the current launcher version safe, and announces compensation. Earlier: first notice 03:14, Kim Hyung-tae 08:07 | Nov 4, 23:10 |
+| Publisher statements | Nov 4, 23:00 to 23:07: Level Infinite apologises and posts a follow-up measures notice. It confirms that a third party tampered with launcher files, says PCs and account data may have been exposed and the scope is still being investigated, calls the current launcher version safe, and announces compensation. At 23:10 it also published a manual check guide, and at 23:11 to 23:13 Kim Hyung-tae said the launcher was updated with a scanning tool that runs at launch. Earlier: first notice 03:14, Kim Hyung-tae 08:07 | Nov 4, 23:20 |
 | Official removal tool | From Nov 5, 08:00 JST (Nov 4, 23:00 GMT) the official PC client scans for the malware and offers to remove it. Announced, not tested here | Nov 4, 23:10 |
 | Technical report | Newest revision Nov 4, 22:20 (19 revisions, the last only fixes translation links). 177 comments. It links its author's scanner at the top, which this guide has not reviewed, and is translated into 15 languages, including Russian | Nov 4, 23:07 |
 | Stolen data being misused | No such report found in the report's comments (absence of reports, not proof). The publisher says only that PCs and accounts may have been exposed | Nov 4, 23:07 |
@@ -68,7 +68,7 @@ From Level Infinite's follow-up notice (read in the Korean original, the wording
 
 - **Who should check:** anyone who started the PC launcher at least once after Sep 27, 06:41 GMT (15:41 JST).
 - **PC check:** from Nov 5, 08:00 JST (Nov 4, 23:00 GMT) the official PC client scans for the malware and removes it. Close Chrome and other browsers first, then start the client. If something is found, a popup asks whether to remove the malware's logs, DLLs and registry data, and agreeing deletes them. If a browser was still open, some DLL files may stay, but they no longer run. No popup means nothing was found. The publisher admits the popup is not polished yet.
-- **No launcher installed, or you want to check by hand:** a separate manual check guide is promised in another notice. We have not seen it yet. The manual check in section 3 stays valid meanwhile.
+- **Manual check, no launcher installed or you prefer to check by hand:** the publisher's manual guide is out (Nov 4, 23:10 to 23:11 GMT, [English post](https://x.com/NIKKE_en/status/2118118928631451774) with the steps on the official site). It says the incident was limited to the PC launcher, so players who only played on mobile need to do nothing. Its steps match section 3 here: disconnect from the network and close the game, the launcher and Chrome; search `Launcher\intl_service\debug.log` for `k2f_chan registered`; if it is found, delete the `HKEY_CURRENT_USER\Software\Classes\CLSID\{E77CC89B-7401-4C04-8CED-149DB35ADD04}` key and restart Windows, delete the 64-hex folder with `platform_experience_helper.dll` under `PlatformExperienceHelper`, delete a `tinyget.<date>-<time>.log` file of exactly 205,135 bytes in `Launcher\log\tinyget`, and delete `%APPDATA%\nikke_launcher\tbs_cache`. It adds an antivirus update with a full scan and a Windows Security Offline Scan, and says that not finding the string does not completely rule out risk. For Google Play Games installs it gives the example path `C:\NIKKE_GOOGLE\Launcher\intl_service\debug.log`.
 - **Account protection** (from another device, or after the PC check): change the passwords of accounts you used on that PC, and revoke and reissue any API keys and access tokens you used or stored on it.
 - **Losses outside the game** (accounts, money): contact the official in-game Customer Support, which promises to review each case.
 - **The launcher:** the apology says the currently distributed version is safe to use. Our own checks agree that the official files are clean (section 6).
@@ -91,7 +91,7 @@ Do this **before** you uninstall, delete or reinstall anything, and with the lau
 4. Search the files in `%APPDATA%\nikke_launcher\tbs_cache\Local Storage\leveldb\` for the text `k2f.agent`. Found: **RED**. Not found proves little: LevelDB can move old records into compressed files that a text search cannot read.
 5. If you run Pi-hole, NextDNS or look at router logs: a lookup of `insightjs.com` means the loader ran (**YELLOW**). A lookup of `analytics.insightjs.com` suggests the agent stage was reached. A DNS log can miss lookups, so a clean DNS log is not proof.
 6. Did the launcher itself show a security warning? That is the loader's fallback page, not proof of infection (see the myths in section 5). It counts as **YELLOW**: the modified script loaded. It says nothing about whether the agent ran, and not seeing it proves nothing either.
-7. Do you play through Google Play Games on PC? Reports say that install is affected too. Its launcher data folder is named `nikke_launcher_google`, and one user found `k2f_chan` in a `debug.log` under `C:\NIKKE_GOOGLE` (reported, not verified here). Run steps 1 to 4 on that install, with its own folder names.
+7. Do you play through Google Play Games on PC? The publisher's manual guide gives `C:\NIKKE_GOOGLE\Launcher\intl_service\debug.log` as an example path, and one user reports finding `k2f_chan` there. Its launcher data folder is named `nikke_launcher_google`. Run steps 1 to 4 on that install, with its own folder names.
 
 </details>
 
@@ -170,7 +170,7 @@ Short replies for people asking in threads and chats. Each one fits in a post.
 - **"Is the launcher safe to open now?"** Level Infinite now says the current launcher version is safe, and our checks agree that the official files are clean. Delete `tbs_cache` first, and use the official client's new scan (from Nov 4, 23:00 GMT). https://github.com/SpringZali/nikke-launcher-triage
 ## 6. What is known, and how well
 
-**VERIFIED** = reproduced from a public source. **CORROBORATED** = several independent reports agree. **REPORTED** = one source. Full table with 35 claims and how to reproduce each: [ANALYSIS.md](ANALYSIS.md).
+**VERIFIED** = reproduced from a public source. **CORROBORATED** = several independent reports agree. **REPORTED** = one source. Full table with 36 claims and how to reproduce each: [ANALYSIS.md](ANALYSIS.md).
 
 | Fact | How well established | Source |
 |---|---|---|
@@ -187,6 +187,7 @@ Short replies for people asking in threads and chats. Each one fits in a post.
 | A third party tampered with launcher files, and PCs and accounts may have been exposed | **VERIFIED** (read at the source) | Level Infinite's [apology](https://x.com/NIKKE_en/status/2118116340225732677) and [follow-up notice](https://x.com/NIKKE_kr/status/2118117786568560774), Nov 4 |
 | Publisher's timeline: `insightjs.com` taken over Sep 27, malware distributed to PCs from Oct 29, 18:52 GMT | **REPORTED** by the publisher | The notice. The dates fit our registry and file checks. The report's earliest agent start (Oct 23) is earlier |
 | The official PC client scans for and removes the malware from Nov 4, 23:00 GMT | **REPORTED** by the publisher | The notice. Not tested here, on purpose |
+| The publisher's manual check guide matches this guide's manual check | **VERIFIED** (read at the source) | The [English post](https://x.com/NIKKE_en/status/2118118928631451774) and the official page it links. Same log string, registry key, DLL folder and `tbs_cache`, plus a 205,135-byte `tinyget` log and an antivirus scan |
 | How the attacker got write access to the CDN | **UNKNOWN** | Not yet explained |
 
 ## 7. Timeline (GMT)
@@ -214,6 +215,8 @@ Short replies for people asking in threads and chats. Each one fits in a post.
 | Nov 4, 09:56 | All four files clean on every server tested | verified |
 | Nov 4, 23:00 to 23:07 | Level Infinite posts an apology and a follow-up measures notice with guidance for players | official |
 | Nov 4, 23:00 | The official PC client starts scanning for and removing the malware (Nov 5, 08:00 JST) | official, announced |
+| Nov 4, 23:10 to 23:11 | Level Infinite posts the manual security check guide (English, Korean, Japanese) | official |
+| Nov 4, 23:11 to 23:13 | SHIFT UP's Kim Hyung-tae: the PC launcher is updated and runs a security check at launch | official |
 
 ## 8. Do not get scammed
 
@@ -227,16 +230,16 @@ A "NIKKE virus remover", a "launcher fixer", an `.exe` or `.zip` "cleanup tool",
 
 ## 9. What players still need from SHIFT UP and Level Infinite
 
-Level Infinite's apology and follow-up notice (Nov 4, 23:00 to 23:07 GMT) answer several earlier points: the current launcher version is called safe, there is an official scan, and there is advice on passwords, API keys and tokens. Still open:
+Level Infinite's apology and follow-up notice (Nov 4, 23:00 to 23:11 GMT) answer several earlier points: the current launcher version is called safe, there is an official scan and a manual check guide, and there is advice on passwords, API keys and tokens. Still open:
 
 1. **Scope:** the notice says the scope of damage is still being investigated. Which launches, regions and dates were affected is not stated, and neither is whether player credentials were actually taken.
-2. **The manual check guide**, promised for players without the launcher or who want to check by hand. We have not seen it yet.
-3. **How the CDN was accessed**, and confirmation that other files and buckets were checked. The notice says the network security environment, including the CDN, is being reviewed.
-4. **What the official scan does and does not remove.** The notice names logs, DLL files and registry data. It does not say how it treats the agent's saved state in the launcher's storage.
-5. **A forced cache reset** in the launcher update is not mentioned, so keep deleting `tbs_cache` yourself.
-6. **A way to tell** whether an account's sessions were used abnormally.
+2. **How the CDN was accessed**, and confirmation that other files and buckets were checked. The notice says the network security environment, including the CDN, is being reviewed.
+3. **What the official scan does and does not remove.** The notice names logs, DLL files and registry data. It does not say how it treats the agent's saved state in the launcher's storage.
+4. **A forced cache reset** in the launcher update is not mentioned, but the manual guide tells you to delete `tbs_cache` yourself.
+5. **A way to tell** whether an account's sessions were used abnormally.
 ## Changelog
 
+- **2026-11-04, 23:32, v2.9.** Correction of v2.8: the publisher's manual check guide was already out (Nov 4, 23:10 to 23:11 GMT) and v2.8 wrongly said it was still promised. Added its steps in section 2 (they match section 3), confirmed the Google Play Games path in step 7, added a timeline row, a row in section 6 and the sources, and removed it from the open points in section 9.
 - **2026-11-04, 23:13, v2.8.** Level Infinite published an apology and a follow-up notice with guidance. Added an "Official guidance" subsection in section 2 and a note at the top, updated the status board, the GREEN row, precaution 4, the "Is the launcher safe to open now?" answer, the table in section 6, the timeline and section 9, and added the publisher's timeline. Notes: the official scan deletes what it finds, so copy `debug.log` first if you want a record (our suggestion). Read from the Korean original, translations are ours.
 
 - **2026-11-04, 22:41, v2.7.** Added a note for people who play through Google Play Games on PC (manual check step 7 and ANALYSIS row 32, both reported, not verified here). Also added the infrastructure facts of ANALYSIS row 31. The status board was not refreshed in this update.
@@ -254,6 +257,7 @@ Level Infinite's apology and follow-up notice (Nov 4, 23:00 to 23:07 GMT) answer
 - [MotherSphere's report](https://gist.github.com/MotherSphere/d6c049a09ba8ac3085c51ee9df24a4e5) and the players who shared their logs and network records in its comments. This guide would not exist without them. The report is also available in 15 languages, including [Russian](https://gist.github.com/MotherSphere/d6c049a09ba8ac3085c51ee9df24a4e5#file-nikke-pc-launcher-compromise_ru-md). We have not checked the translations.
 - Official notices, Nov 4: [NIKKE English account](https://x.com/NIKKE_en/status/2117817602659770434) (03:13 GMT) and [NIKKE Japan account](https://x.com/NIKKE_japan/status/2117817740555956289) (03:14 GMT)
 - Level Infinite's apology and follow-up measures notice, Nov 4: [English apology](https://x.com/NIKKE_en/status/2118116340225732677) (23:01 GMT), [Korean follow-up measures notice](https://x.com/NIKKE_kr/status/2118117786568560774) (23:06 GMT), which links to the official page on nikke-kr.com
+- Level Infinite's manual security check guide, Nov 4: [English post](https://x.com/NIKKE_en/status/2118118928631451774) (23:11 GMT, steps on nikke-en.com) and the [Korean post](https://x.com/NIKKE_kr/status/2118118725518086221) (23:10 GMT). SHIFT UP's Kim Hyung-tae on the launcher update: [post](https://x.com/jamm3rd/status/2118119533282279671) (23:13 GMT)
 - [Kim Hyung-tae of SHIFT UP, statement of Nov 4](https://x.com/jamm3rd/status/2117891546322252242) (08:07 GMT)
 - [Inven Global](https://www.invenglobal.com/articles/28112/goddess-of-victory-nikke-pc-launcher-allegedly-compromised) and Japanese coverage: [Inside Games](https://www.inside-games.jp/article/2026/11/04/190338.html), [Mynavi](https://news.mynavi.jp/article/20261104-5254830/), [Automaton](https://automaton-media.com/articles/newsjp/20261104-477333/)
 - **Review, feedback and community reports:** [Necromancer](https://github.com/necromancer124), a community member who is learning IT, reviewed the draft, suggested the log-tampering caveat and contributed two reports, published unchanged in [community/](community/README.md) (not verified here).
