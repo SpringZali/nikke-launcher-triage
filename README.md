@@ -6,12 +6,12 @@
 > [!NOTE]
 > Community guide. **Not an official statement.** Not affiliated with SHIFT UP, Level Infinite or Tencent, and not professional incident-response advice. It builds on [MotherSphere's technical report](https://gist.github.com/MotherSphere/d6c049a09ba8ac3085c51ee9df24a4e5), the source for almost every technical detail here. Prepared with AI assistance. Every check is reproducible: see [ANALYSIS.md](ANALYSIS.md).
 
-**Last updated: 2026-11-04, 11:00 GMT**. Things are still changing, so look at the date. Changes are listed in the [changelog](#changelog).
+**Last updated: 2026-11-04, 11:13 GMT**. Things are still changing, so look at the date. Changes are listed in the [changelog](#changelog).
 
 | Status board | Now | Checked (GMT) |
 |---|---|---|
 | Official CDN files | All four byte-identical to the known-clean versions, on every server tested | Nov 4, 09:56 |
-| Publisher statement | First notice posted Nov 4, 03:14. A separate guidance notice was promised; none found yet | Nov 4, 09:56 |
+| Publisher statements | First notice posted Nov 4, 03:14. At 08:07, SHIFT UP's Kim Hyung-tae added an apology: they are working with Level Infinite on a fundamental solution and preparing follow-up measures. No scope or advice for players yet | Nov 4, 11:13 |
 | Technical report | Newest revision Nov 4, 01:55. 127 comments from 62 people | Nov 4, 09:56 |
 | Stolen data being misused | No such report found in the report's comments (absence of reports, not proof) | Nov 4, 09:51 |
 | Attacker's server | Reported offline since Nov 3, 18:31 (not verified here) | Nov 4, 09:56 |
@@ -183,6 +183,7 @@ Short replies for people asking in threads and chats. Each one fits in a post.
 | Nov 3, 20:19 | `FeedList` re-published | verified |
 | Nov 3, up to 22:26 | Two CDN servers still serve the modified `FeedList` | reported, matches [Inven Global](https://www.invenglobal.com/articles/28112/goddess-of-victory-nikke-pc-launcher-allegedly-compromised) |
 | Nov 4, 03:14 | Publisher's first public statement | verified |
+| Nov 4, 08:07 | SHIFT UP's Kim Hyung-tae apologises: working with Level Infinite on a fundamental solution, preparing follow-up measures | verified |
 | Nov 4, 09:56 | All four files clean on every server tested | verified |
 
 ## 8. Do not get scammed
@@ -197,7 +198,7 @@ A "NIKKE virus remover", a "launcher fixer", an `.exe` or `.zip` "cleanup tool",
 
 ## 9. What players still need from SHIFT UP and Level Infinite
 
-As of Nov 4, the notice says the scope is under investigation and that guidance will follow separately. Players still need:
+As of Nov 4, the notice says the scope is under investigation and that guidance will follow separately. A later statement from SHIFT UP's Kim Hyung-tae (08:07 GMT) apologises, says the company and Level Infinite are working on a fundamental solution and promises updates on follow-up measures. Neither gives the scope or advice for players yet. Players still need:
 
 1. **Scope:** which launches, regions and dates were affected.
 2. **Credentials:** whether player credentials or sessions were exposed, and clear advice on password changes.
@@ -208,6 +209,7 @@ As of Nov 4, the notice says the scope is under investigation and that guidance 
 
 ## Changelog
 
+- **2026-11-04, 11:13, v2.3.** Added SHIFT UP's second statement (Kim Hyung-tae, 08:07 GMT) to the status board, timeline and sources.
 - **2026-11-04, 11:00, v2.2.** Added the security-warning nuance: a YELLOW example, manual check step 6, a myth row and a short answer.
 - **2026-11-04, 10:28, v2.1.** Added short copy-paste answers and a credit for community review.
 - **2026-11-04, 10:11, v2.** Restyled. Added the status board, decision flow, myths and facts, timeline, scam warning and the list of what players still need. Added "a clean log is evidence, not proof" and "no misuse reports found" (keyword scan). Clarified that uninstalling deletes `debug.log` and can remove the saved data too. Clarified that blocking the attacker's IPs is of limited value.
@@ -216,7 +218,8 @@ As of Nov 4, the notice says the scope is under investigation and that guidance 
 ## Sources and credit
 
 - [MotherSphere's report](https://gist.github.com/MotherSphere/d6c049a09ba8ac3085c51ee9df24a4e5) and the players who shared their logs and network records in its comments. This guide would not exist without them.
-- [Official notice, NIKKE Japan account](https://x.com/NIKKE_japan/status/2117817740555956289) (Nov 4)
+- Official notices, Nov 4: [NIKKE English account](https://x.com/NIKKE_en/status/2117817602659770434) (03:13 GMT) and [NIKKE Japan account](https://x.com/NIKKE_japan/status/2117817740555956289) (03:14 GMT)
+- [Kim Hyung-tae of SHIFT UP, statement of Nov 4](https://x.com/jamm3rd/status/2117891546322252242) (08:07 GMT)
 - [Inven Global](https://www.invenglobal.com/articles/28112/goddess-of-victory-nikke-pc-launcher-allegedly-compromised) and Japanese coverage: [Inside Games](https://www.inside-games.jp/article/2026/11/04/190338.html), [Mynavi](https://news.mynavi.jp/article/20261104-5254830/), [Automaton](https://automaton-media.com/articles/newsjp/20261104-477333/)
 - **Review and feedback:** [Necromancer](https://github.com/necromancer124), a community member who is learning IT, reviewed the draft and suggested the log-tampering caveat.
 
