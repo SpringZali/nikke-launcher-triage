@@ -6,7 +6,7 @@
 > [!NOTE]
 > Community guide. **Not an official statement.** Not affiliated with SHIFT UP, Level Infinite or Tencent, and not professional incident-response advice. It builds on [MotherSphere's technical report](https://gist.github.com/MotherSphere/d6c049a09ba8ac3085c51ee9df24a4e5), the source for almost every technical detail here. Prepared with AI assistance. Every check is reproducible: see [ANALYSIS.md](ANALYSIS.md).
 
-**Last updated: 2026-11-04, 10:28 GMT**. Things are still changing, so look at the date. Changes are listed in the [changelog](#changelog).
+**Last updated: 2026-11-04, 11:00 GMT**. Things are still changing, so look at the date. Changes are listed in the [changelog](#changelog).
 
 | Status board | Now | Checked (GMT) |
 |---|---|---|
@@ -72,6 +72,7 @@ Do this **before** you uninstall, delete or reinstall anything, and with the lau
 3. In File Explorer open `%LOCALAPPDATA%\Google\Chrome\User Data\PlatformExperienceHelper\`. A subfolder named with 64 hex characters that contains `platform_experience_helper.dll`: **RED**. The folder itself is normal Chrome. The report says the DLL can be installed even without Chrome.
 4. Search the files in `%APPDATA%\nikke_launcher\tbs_cache\Local Storage\leveldb\` for the text `k2f.agent`. Found: **RED**.
 5. If you run Pi-hole, NextDNS or look at router logs: a lookup of `insightjs.com` means the loader ran (**YELLOW**). A lookup of `analytics.insightjs.com` suggests the agent stage was reached. A DNS log can miss lookups, so a clean DNS log is not proof.
+6. Did the launcher itself show a security warning? That is the loader's fallback page, not proof of infection (see the myths in section 5). It counts as **YELLOW**: the modified script loaded. It says nothing about whether the agent ran, and not seeing it proves nothing either.
 
 </details>
 
@@ -89,7 +90,7 @@ powershell -NoProfile -ExecutionPolicy Bypass -File .\Check-NikkeLauncher.ps1
 | Result | What it means | What to do |
 |---|---|---|
 | **RED**: `k2f_chan` in the log, `k2f.agent` in storage, or the registry key / DLL folder exists | The agent ran. The operator could run any command and read your files. The logs cannot show which. | Follow [RED in detail](#red-in-detail) below. |
-| **YELLOW**: loader traces (`insightjs` in cache, DNS or the launcher's download logs) but no sign of the agent | The first stage ran. Nothing shows the agent did. | Delete `%APPDATA%\nikke_launcher\tbs_cache`, do the [precautions](#precautions-10-minutes), keep watching your accounts. A wipe is not warranted by this alone. |
+| **YELLOW**: loader traces (`insightjs` in cache, DNS or the launcher's download logs, or a security warning shown inside the launcher) but no sign of the agent | The first stage ran. Nothing shows the agent did. | Delete `%APPDATA%\nikke_launcher\tbs_cache`, do the [precautions](#precautions-10-minutes), keep watching your accounts. A wipe is not warranted by this alone. |
 | **GREY**: no log and no launcher data left (uninstalled or reinstalled), but you launched in the window | You cannot tell. | Treat it as "possibly exposed": do the [precautions](#precautions-10-minutes). Absence of evidence alone does not justify a wipe, but reconsider if the PC holds high-value secrets. Evidence that survives an uninstall: Windows' SRUM network records (below). |
 | **GREEN**: log present, covers your launches, no hits anywhere | No sign the agent ran. | Delete `tbs_cache` before the next launch and wait for the official all-clear. |
 | You never started the PC launcher between Sep 27 and Nov 3 | Not exposed. | Nothing to do. |
@@ -131,6 +132,7 @@ People in the report's comments show anything from about 0.4 MB to over 100 MB s
 | "Everything on every PC was stolen." | Only if the agent ran, and the report says the attack code was served on only some launches, and several players in its comments found no sign of the agent. Exposure is not infection. |
 | "The attacker had no time, nothing was stolen." | Nobody can say that for a specific PC. The report says a first collection starts within seconds of the agent starting (reported). On the other side, no misuse of stolen data has been reported in the report's comments so far. Both are true: it is unknown, and there is no sign of misuse yet. |
 | "A clean log means I'm safe." | It is good evidence, not proof (see the note in section 3). |
+| "The launcher showed a security warning, so I'm infected." | Not by itself. The warning comes from a page on `insightjs.org`, registered on Nov 3 after the incident became public. By the report's description, the modified script falls back to that address when it cannot reach the attacker's server, for example because the address was blocked or the server went offline. So the warning means the modified script loaded (YELLOW), not that the agent ran. Seeing no warning proves nothing either. The log decides. |
 | "I have to wipe Windows." | Only the RED result calls for it, and even then it is the way to be *certain*. For YELLOW, GREY and GREEN the evidence so far does not justify it. |
 | "I have to switch off my PC and cut the internet." | No. Close the launcher. If you find RED, disconnect while you sort out your passwords from another device. |
 | "Uninstalling the launcher fixes it." | It stops new exposure but undoes nothing, and it erases your evidence. |
@@ -145,10 +147,11 @@ Short replies for people asking in threads and chats. Each one fits in a post.
 - **"Do I need to wipe Windows?"** Not automatically. Close the launcher, don't uninstall yet, and check `debug.log` for `k2f_chan` first. A hit means the agent ran, and then a reinstall is the only way to be certain. https://github.com/SpringZali/nikke-launcher-triage
 - **"I already uninstalled it. Am I fine?"** You can't tell from logs, because uninstalling deletes them. Do the 10-minute precautions (change passwords from another device, sign out of all sessions) and don't panic-wipe. https://github.com/SpringZali/nikke-launcher-triage
 - **"Is it a hoax?"** No. SHIFT UP's own notice reports an anomaly consistent with tampering, and the domain, certificate and CDN details check out. What is not confirmed yet is how many players got the second stage. https://github.com/SpringZali/nikke-launcher-triage
+- **"I saw a security warning in the launcher. Am I hacked?"** Not necessarily. The warning means the modified script loaded, not that the remote-control program ran. Check ``debug.log`` for ``k2f_chan`` before you uninstall anything. https://github.com/SpringZali/nikke-launcher-triage
 - **"Is the launcher safe to open now?"** The official files look clean now, but SHIFT UP has not given an all-clear. Wait for it, and delete `tbs_cache` before you open the launcher again. https://github.com/SpringZali/nikke-launcher-triage
 ## 6. What is known, and how well
 
-**VERIFIED** = reproduced from a public source. **CORROBORATED** = several independent reports agree. **REPORTED** = one source. Full table with 22 claims and how to reproduce each: [ANALYSIS.md](ANALYSIS.md).
+**VERIFIED** = reproduced from a public source. **CORROBORATED** = several independent reports agree. **REPORTED** = one source. Full table with 23 claims and how to reproduce each: [ANALYSIS.md](ANALYSIS.md).
 
 | Fact | How well established | Source |
 |---|---|---|
@@ -205,6 +208,7 @@ As of Nov 4, the notice says the scope is under investigation and that guidance 
 
 ## Changelog
 
+- **2026-11-04, 11:00, v2.2.** Added the security-warning nuance: a YELLOW example, manual check step 6, a myth row and a short answer.
 - **2026-11-04, 10:28, v2.1.** Added short copy-paste answers and a credit for community review.
 - **2026-11-04, 10:11, v2.** Restyled. Added the status board, decision flow, myths and facts, timeline, scam warning and the list of what players still need. Added "a clean log is evidence, not proof" and "no misuse reports found" (keyword scan). Clarified that uninstalling deletes `debug.log` and can remove the saved data too. Clarified that blocking the attacker's IPs is of limited value.
 - **2026-11-04, 09:35, v1.** Guide, analysis and two read-only checkers.
