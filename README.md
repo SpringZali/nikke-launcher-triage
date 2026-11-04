@@ -6,7 +6,7 @@
 > [!NOTE]
 > Community guide. **Not an official statement.** Not affiliated with SHIFT UP, Level Infinite or Tencent, and not professional incident-response advice. It builds on [MotherSphere's technical report](https://gist.github.com/MotherSphere/d6c049a09ba8ac3085c51ee9df24a4e5), the source for almost every technical detail here. Prepared with AI assistance. Every check is reproducible: see [ANALYSIS.md](ANALYSIS.md).
 
-**Last updated: 2026-11-04, 10:11 GMT**. Things are still changing, so look at the date. Changes are listed in the [changelog](#changelog).
+**Last updated: 2026-11-04, 10:28 GMT**. Things are still changing, so look at the date. Changes are listed in the [changelog](#changelog).
 
 | Status board | Now | Checked (GMT) |
 |---|---|---|
@@ -138,6 +138,14 @@ People in the report's comments show anything from about 0.4 MB to over 100 MB s
 | "Changing my NIKKE password is enough." | It is the first step, not the only one. Saved browser passwords, cookies and tokens can be targeted if the agent ran. |
 | "Only Windows is affected." | The report also covers Linux and Steam Deck (Proton), where an agent start is reported. |
 
+### Short answers you can copy
+
+Short replies for people asking in threads and chats. Each one fits in a post.
+
+- **"Do I need to wipe Windows?"** Not automatically. Close the launcher, don't uninstall yet, and check `debug.log` for `k2f_chan` first. A hit means the agent ran, and then a reinstall is the only way to be certain. https://github.com/SpringZali/nikke-launcher-triage
+- **"I already uninstalled it. Am I fine?"** You can't tell from logs, because uninstalling deletes them. Do the 10-minute precautions (change passwords from another device, sign out of all sessions) and don't panic-wipe. https://github.com/SpringZali/nikke-launcher-triage
+- **"Is it a hoax?"** No. SHIFT UP's own notice reports an anomaly consistent with tampering, and the domain, certificate and CDN details check out. What is not confirmed yet is how many players got the second stage. https://github.com/SpringZali/nikke-launcher-triage
+- **"Is the launcher safe to open now?"** The official files look clean now, but SHIFT UP has not given an all-clear. Wait for it, and delete `tbs_cache` before you open the launcher again. https://github.com/SpringZali/nikke-launcher-triage
 ## 6. What is known, and how well
 
 **VERIFIED** = reproduced from a public source. **CORROBORATED** = several independent reports agree. **REPORTED** = one source. Full table with 22 claims and how to reproduce each: [ANALYSIS.md](ANALYSIS.md).
@@ -197,6 +205,7 @@ As of Nov 4, the notice says the scope is under investigation and that guidance 
 
 ## Changelog
 
+- **2026-11-04, 10:28, v2.1.** Added short copy-paste answers and a credit for community review.
 - **2026-11-04, 10:11, v2.** Restyled. Added the status board, decision flow, myths and facts, timeline, scam warning and the list of what players still need. Added "a clean log is evidence, not proof" and "no misuse reports found" (keyword scan). Clarified that uninstalling deletes `debug.log` and can remove the saved data too. Clarified that blocking the attacker's IPs is of limited value.
 - **2026-11-04, 09:35, v1.** Guide, analysis and two read-only checkers.
 
@@ -205,5 +214,6 @@ As of Nov 4, the notice says the scope is under investigation and that guidance 
 - [MotherSphere's report](https://gist.github.com/MotherSphere/d6c049a09ba8ac3085c51ee9df24a4e5) and the players who shared their logs and network records in its comments. This guide would not exist without them.
 - [Official notice, NIKKE Japan account](https://x.com/NIKKE_japan/status/2117817740555956289) (Nov 4)
 - [Inven Global](https://www.invenglobal.com/articles/28112/goddess-of-victory-nikke-pc-launcher-allegedly-compromised) and Japanese coverage: [Inside Games](https://www.inside-games.jp/article/2026/11/04/190338.html), [Mynavi](https://news.mynavi.jp/article/20261104-5254830/), [Automaton](https://automaton-media.com/articles/newsjp/20261104-477333/)
+- **Review and feedback:** [Necromancer](https://github.com/necromancer124), a community member who is learning IT, reviewed the draft and suggested the log-tampering caveat.
 
 Maintained by @SpringZ_FSG. Corrections are welcome: open an issue and include a source.
