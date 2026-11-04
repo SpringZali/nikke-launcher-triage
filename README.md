@@ -6,7 +6,7 @@
 > [!NOTE]
 > Community guide. **Not an official statement.** Not affiliated with SHIFT UP, Level Infinite or Tencent, and not professional incident-response advice. It builds on [MotherSphere's technical report](https://gist.github.com/MotherSphere/d6c049a09ba8ac3085c51ee9df24a4e5), the source for almost every technical detail here. Prepared with AI assistance. Every check is reproducible: see [ANALYSIS.md](ANALYSIS.md).
 
-**Last updated: 2026-11-04, 16:10 GMT**. Things are still changing, so look at the date. Changes are listed in the [changelog](#changelog).
+**Last updated: 2026-11-04, 22:41 GMT**. Things are still changing, so look at the date. Changes are listed in the [changelog](#changelog).
 
 | Status board | Now | Checked (GMT) |
 |---|---|---|
@@ -73,6 +73,7 @@ Do this **before** you uninstall, delete or reinstall anything, and with the lau
 4. Search the files in `%APPDATA%\nikke_launcher\tbs_cache\Local Storage\leveldb\` for the text `k2f.agent`. Found: **RED**. Not found proves little: LevelDB can move old records into compressed files that a text search cannot read.
 5. If you run Pi-hole, NextDNS or look at router logs: a lookup of `insightjs.com` means the loader ran (**YELLOW**). A lookup of `analytics.insightjs.com` suggests the agent stage was reached. A DNS log can miss lookups, so a clean DNS log is not proof.
 6. Did the launcher itself show a security warning? That is the loader's fallback page, not proof of infection (see the myths in section 5). It counts as **YELLOW**: the modified script loaded. It says nothing about whether the agent ran, and not seeing it proves nothing either.
+7. Do you play through Google Play Games on PC? Reports say that install is affected too. Its launcher data folder is named `nikke_launcher_google`, and one user found `k2f_chan` in a `debug.log` under `C:\NIKKE_GOOGLE` (reported, not verified here). Run steps 1 to 4 on that install, with its own folder names.
 
 </details>
 
@@ -212,6 +213,7 @@ As of Nov 4, the notice says the scope is under investigation and that guidance 
 
 ## Changelog
 
+- **2026-11-04, 22:41, v2.7.** Added a note for people who play through Google Play Games on PC (manual check step 7 and ANALYSIS row 32, both reported, not verified here). Also added the infrastructure facts of ANALYSIS row 31. The status board was not refreshed in this update.
 - **2026-11-04, 16:10, v2.6.** The report's newest revision now recommends its author's scanner at the top. Added a note that this guide has not reviewed its current release, what the author says about the registry key and the DLL folder, a link to the report's Russian translation, and refreshed the status board and the counts.
 - **2026-11-04, 12:50, v2.5.** The exposure window now ends on Nov 4 at 03:20 GMT instead of Nov 3: the report's newest revision says some CDN servers served the modified `FeedList` until then. Added the reset advice of the report's author (a reset with "Remove everything" counts, "Keep my files" does not), two timeline rows, and refreshed the status board and the counts. Removed the "SENDING" section from the community notes file, because it does not apply to a public repository.
 - **2026-11-04, 11:42, v2.4.** Added the [community reports](community/README.md) (published unchanged) with a credit, a row in the table of what is known, and a caveat on the LevelDB search in step 4.
