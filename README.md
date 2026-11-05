@@ -9,17 +9,17 @@
 > [!TIP]
 > If you want to keep your evidence, copy `Launcher\intl_service\debug.log` before you run the official scan, because the scan deletes what it finds. This is our suggestion, not an official step.
 
-**Last updated: 2026-11-05, 00:15 GMT**. Things are still changing, so look at the date. Changes are listed in the [changelog](#changelog).
+**Last updated: 2026-11-05, 10:33 GMT**. Things are still changing, so look at the date. Changes are listed in the [changelog](#changelog).
 
 | Status board | Now | Checked (GMT) |
 |---|---|---|
-| Official CDN files | All four byte-identical to the known-clean versions, on every server tested (our check) | Nov 4, 23:44 |
+| Official CDN files | All four byte-identical to the known-clean versions, on every server tested (our check) | Nov 5, 10:07 |
 | Publisher statements | Nov 4, 23:00 to 23:13: Level Infinite apologises and posts a follow-up measures notice. It confirms that a third party tampered with launcher files, says PCs and account data may have been exposed and the scope is still being investigated, calls the current launcher version safe, and announces compensation. SHIFT UP's Kim Hyung-tae says the launcher was updated with a scanning tool that runs at launch. Earlier: first notice 03:14, Kim Hyung-tae 08:07 | Nov 4, 23:46 |
 | Official removal tool | From Nov 5, 08:00 JST (Nov 4, 23:00 GMT) the official PC client scans for the malware and offers to remove it. Announced, not tested here | Nov 4, 23:46 |
 | Official manual check guide | Published Nov 4, 23:10 to 23:11 GMT (English, Korean, Japanese). Section 3 follows its steps | Nov 4, 23:46 |
 | Community report (unofficial) | A private individual's technical report, not confirmed by the publisher. Still being edited (21 revisions, newest Nov 4, 23:23, and 181 comments). This guide does not base advice on it | Nov 4, 23:46 |
 | Stolen data being misused | No public report found in the community comments (absence of reports, not proof). The publisher says only that PCs and accounts may have been exposed | Nov 4, 23:44 |
-| Attacker's server | The host, 1984 ehf, told us it shut down a server (not named). The domain's DNS still points to the old address and is not suspended yet (our check). Abuse reports to the host and the registrar are filed (ANALYSIS row 31) | Nov 4, 23:44 |
+| Attacker's server | The registrar suspended `insightjs.com` on Nov 5 at 02:05 GMT and confirmed by email at 06:38 GMT that it reviewed our abuse report and suspended the domain under its terms of service (case 53615760). The registry shows a client hold and the name servers point to its suspension pages, and the names no longer resolve in public DNS (our checks, 10:33 GMT). This does not clean PCs that are already infected, and the attacker could use another domain. The host, 1984 ehf, told us it shut down a server (not named). Abuse reports to the host and the registrar were filed on Nov 4 (ANALYSIS row 31) | Nov 5, 10:33 |
 
 ## Contents
 
@@ -175,7 +175,7 @@ Short replies for people asking in threads and chats. Each one fits in a post.
 | The files served now are the clean versions | **VERIFIED** | [`Check-OfficialCdn.ps1`](Check-OfficialCdn.ps1) |
 | `insightjs.com` was registered Sep 27 and `insightjs.org` Nov 3 | **VERIFIED** | Domain registry records |
 | Certificates were issued for the attacker's domain on Sep 27, Oct 6, Oct 23 and Oct 24 | **VERIFIED** | Certificate transparency log |
-| The attacker's domain still points to a server of the host 1984 ehf and is not suspended | **VERIFIED** (registry and DNS only) | ANALYSIS rows 2, 5 and 31 |
+| The attacker's domain `insightjs.com` was suspended by its registrar on Nov 5 at 02:05 GMT and no longer resolves | **VERIFIED** (registry and DNS only) | ANALYSIS rows 2, 5 and 31 |
 
 **From the community report (unofficial, unconfirmed)**
 
@@ -215,6 +215,7 @@ Short replies for people asking in threads and chats. Each one fits in a post.
 | Nov 4, 23:00 | The official PC client starts scanning for and removing the malware (Nov 5, 08:00 JST) | official, announced |
 | Nov 4, 23:10 to 23:11 | Level Infinite posts the manual security check guide (English, Korean, Japanese) | official |
 | Nov 4, 23:11 to 23:13 | SHIFT UP's Kim Hyung-tae: the PC launcher is updated and runs a security check at launch | official |
+| Nov 5, 02:05 | The registrar suspends `insightjs.com` (registry status client hold, name servers changed to its suspension pages). The names no longer resolve. At 06:38 the registrar confirms by email that it reviewed our report and suspended the domain | verified |
 
 ## 8. Do not get scammed
 
@@ -252,6 +253,7 @@ These come from a community report written by a private individual and from comm
 
 ## Changelog
 
+- **2026-11-05, 10:33, v3.1.** The registrar suspended `insightjs.com` on Nov 5 at 02:05 GMT (registry status client hold, name servers changed to its suspension pages, the names no longer resolve) and confirmed by email at 06:38 GMT that it acted on our abuse report. Updated the status board, the timeline and the table in section 6, and ANALYSIS rows 2, 5 and 31. Nothing else changed: the official scan and the manual check are still the way to clean a PC.
 - **2026-11-05, 00:15, v3.0.** The guide now follows the publisher's guidance first, and treats the community report as an unofficial, unconfirmed source. Sections 1 to 6 were rewritten around the official scan and the official manual check. Section 3 follows the official page step by step, and was checked against it after the rewrite. The green, yellow, grey and red triage was replaced by "found" and "not found, or you cannot check". The end of the exposure window (Nov 4, 03:20 GMT, from the report) was dropped in favour of the publisher's "after Sep 27". The advice to reinstall Windows, the SRUM and blocking notes and the recommendation of the report author's scanner were removed from the README (the report's claims stay in ANALYSIS with their status). Community extras moved to the new section 10. The link to the Russian translation of the report was fixed.
 - **2026-11-04, 23:32, v2.9.** Correction of v2.8: the publisher's manual check guide was already out (Nov 4, 23:10 to 23:11 GMT) and v2.8 wrongly said it was still promised. Added its steps in section 2 (they match section 3), confirmed the Google Play Games path in step 7, added a timeline row, a row in section 6 and the sources, and removed it from the open points in section 9.
 - **2026-11-04, 23:13, v2.8.** Level Infinite published an apology and a follow-up notice with guidance. Added an "Official guidance" subsection in section 2 and a note at the top, updated the status board, the GREEN row, precaution 4, the "Is the launcher safe to open now?" answer, the table in section 6, the timeline and section 9, and added the publisher's timeline. Notes: the official scan deletes what it finds, so copy `debug.log` first if you want a record (our suggestion). Read from the Korean original, translations are ours.
