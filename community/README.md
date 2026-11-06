@@ -14,10 +14,10 @@ Two reports prepared by a community member, [Necromancer](https://github.com/nec
 
 ## What the case study adds
 
-- **A worked example of a RED result.** The agent ran on three separate days (Nov 1 to 3). The logged payload transfer was 205,135 bytes, the same size as in MotherSphere's report.
+- **A worked example of a PC where the agent ran.** It ran on three separate days (Nov 1 to 3). The logged payload transfer was 205,135 bytes, the same size as in MotherSphere's report.
 - **Theft or misuse is not established, and the author says so.** The retained evidence shows the agent ran. It does not show which commands were sent or that any password, key or file was taken. That matches this guide: exposure is serious, misuse is unproven.
 - **Evidence was lost to the cleanup.** The original logs and cache were deleted before a full forensic copy was made. This is why the guide says to check before you uninstall.
-- **The author's own recommendation** is that a clean Windows reinstall is the highest-confidence recovery. That matches step 6 of the RED steps in the guide.
+- **The author's own recommendation** is that a clean Windows reinstall is the highest-confidence recovery. That is the author's view: the publisher does not ask for a reinstall, and the guide follows the publisher (README, section 4).
 
 ## What the scanner review adds, and its limits
 
@@ -32,7 +32,7 @@ We checked only public metadata through the GitHub API on 2026-11-04. We did not
 - The repository `MotherSphere/NIKKE-Launcher-Check` exists, was created on Nov 3 (very new) and is licensed GPL-3.0.
 - Release v0.4.0 points at commit `0bc79c9`, which GitHub marks as signature-verified. The tag points at the same commit.
 - GitHub lists the Windows asset's SHA-256 digest as `152199a0afaa483e1a6b9b27a6568731760867022078aa85a075064a7f1d314f`, which equals the value the review gives.
-- The repository has **newer commits than v0.4.0** (Nov 4, 11:26 GMT). According to their commit messages, they change how the scanner reads compressed LevelDB data and which downloads it counts. The review does not cover them. As of Nov 4, 16:03 GMT the latest release is v0.5.1 (published 13:39 GMT, after v0.4.1 and v0.5.0), and MotherSphere's report now links the scanner at the top. The review covers none of those releases.
+- The repository has **newer commits than v0.4.0** (Nov 4, 11:26 GMT). According to their commit messages, they change how the scanner reads compressed LevelDB data and which downloads it counts. The review does not cover them. As of Nov 4, 16:03 GMT the latest release is v0.5.1 (published 13:39 GMT, after v0.4.1 and v0.5.0), and MotherSphere's report now links the scanner at the top. On Nov 6 at 02:55 GMT the latest release was v0.5.2 (published Nov 4, 22:40 GMT). The review covers none of those releases.
 - The two reports match the manifest. The manifest does not cover the notes file: only its "SENDING" section was removed from this copy, nothing else in it was changed.
 
 Found a problem? Open an issue with a source.

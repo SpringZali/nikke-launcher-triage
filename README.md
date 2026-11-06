@@ -1,7 +1,7 @@
 # NIKKE PC launcher incident: what to do, and what not to do
 
 > [!IMPORTANT]
-> **Follow the publisher's guidance.** Level Infinite (NIKKE's publisher) confirms that a third party tampered with PC launcher files and says the current launcher version is safe to use. It gives two ways to check and clean a PC: the official scan built into the PC client (from Nov 5, 08:00 JST, which is Nov 4, 23:00 GMT) and a manual check guide ([English post](https://x.com/NIKKE_en/status/2118118928631451774)). It also asks everyone who ran the PC launcher to change their passwords and to revoke API keys and tokens. This guide summarises those steps in [section 2](#2-what-to-do-now-official-guidance). According to the publisher, players who only played on mobile need to do nothing.
+> **Follow the publisher's guidance.** Level Infinite (NIKKE's publisher) confirms that a third party tampered with PC launcher files and says the current launcher version is safe to use. It gives two ways to check and clean a PC: the official scan built into the PC client (from Nov 5, 08:00 JST, which is Nov 4, 23:00 GMT) and a manual check guide ([English post](https://x.com/NIKKE_en/status/2118118928631451774)). It also asks everyone who ran the PC launcher to change their passwords and to revoke API keys and tokens. This guide summarises those steps in [section 2](#2-what-to-do-now-official-guidance). According to the publisher, players who only played on mobile need to do nothing. It has also prepared in-game compensation for all players, and asks anyone who thinks they were affected or lost something to contact its Customer Support, which will review each case.
 
 > [!NOTE]
 > Community guide. **Not an official statement.** Not affiliated with SHIFT UP, Level Infinite or Tencent, and not professional incident-response advice. The publisher's notices come first. Besides them we use our own checks of public data (domain registries, certificate logs, the official CDN files) that anyone can repeat: see [ANALYSIS.md](ANALYSIS.md). [MotherSphere's technical report](https://gist.github.com/MotherSphere/d6c049a09ba8ac3085c51ee9df24a4e5) was written by a private individual and is **not confirmed by the publisher**. Malwarebytes [wrote about the incident](https://www.malwarebytes.com/blog/news/2026/11/nikke-pc-launcher-compromise-put-players-passwords-and-personal-files-at-risk) on Nov 5, but it cites the report for the technical details instead of confirming them independently, so we still treat the report's claims as unconfirmed and do not base advice on them. Prepared with AI assistance.
@@ -9,18 +9,20 @@
 > [!TIP]
 > If you want to keep your evidence, copy `Launcher\intl_service\debug.log` before you run the official scan, because the scan deletes what it finds. One player reports that the updated launcher deleted `debug.log` when it started (reported, not verified here), so make the copy before you open the launcher. Keep the copy private: do not post it publicly or send it to people who offer to analyse it. This is our suggestion, not an official step.
 
-**Last updated: 2026-11-06, 02:40 GMT**. Things are still changing, so look at the date. Changes are listed in the [changelog](#changelog).
+**Last updated: 2026-11-06, 03:04 GMT**. Things are still changing, so look at the date. Changes are listed in the [changelog](#changelog).
 
 | Status board | Now | Checked (GMT) |
 |---|---|---|
-| Official CDN files | All four byte-identical to the known-clean versions, on every server tested (our check, repeated every 30 minutes) | Nov 6, 02:07 |
-| Publisher statements | Nov 4, 23:00 to 23:13: Level Infinite apologises and posts a follow-up measures notice. It confirms that a third party tampered with launcher files, says PCs and account data may have been exposed and the scope is still being investigated, calls the current launcher version safe, and announces compensation. SHIFT UP's Kim Hyung-tae says the launcher was updated with a scanning tool that runs at launch. Earlier: first notice 03:14, Kim Hyung-tae 08:07. No new statement about the incident since then | Nov 6, 02:07 |
+| Official CDN files | All four byte-identical to the known-clean versions, on every server tested (our check, repeated every 30 minutes) | Nov 6, 03:02 |
+| Publisher statements | Nov 4, 23:00 to 23:13: Level Infinite apologises and posts a follow-up measures notice. It confirms that a third party tampered with launcher files, says PCs and account data may have been exposed and the scope is still being investigated, calls the current launcher version safe, and announces compensation. SHIFT UP's Kim Hyung-tae says the launcher was updated with a scanning tool that runs at launch. Earlier: first notice 03:14, Kim Hyung-tae 08:07. No new statement about the incident since then (official site and X accounts checked) | Nov 6, 03:02 |
 | Official removal tool | From Nov 5, 08:00 JST (Nov 4, 23:00 GMT) the official PC client scans for the malware and offers to remove it. Announced, not tested here | Nov 4, 23:46 |
 | Official manual check guide | Published Nov 4, 23:10 to 23:11 GMT (English, Korean, Japanese). Section 3 follows its steps | Nov 4, 23:46 |
-| Community report (unofficial) | A private individual's technical report, not confirmed by the publisher (22 revisions, newest Nov 5, 14:39, and 243 comments). This guide does not base advice on it | Nov 6, 02:07 |
+| Compensation and losses | The apology announces in-game compensation for all players, without saying what it contains. Anyone who thinks they were affected or lost something (the notice names PCs, accounts with other services and personal assets) should contact Customer Support, which says it will review each case | Nov 6, 03:00 |
+| Publisher's prevention plans | Stronger security monitoring of the launcher, an integrity check for the external resources it loads, and minimum permissions for each launcher feature. No dates given | Nov 6, 03:00 |
+| Community report (unofficial) | A private individual's technical report, not confirmed by the publisher (22 revisions, newest Nov 5, 14:39, and 244 comments). This guide does not base advice on it | Nov 6, 02:55 |
 | Security vendor coverage | Malwarebytes published a [news article](https://www.malwarebytes.com/blog/news/2026/11/nikke-pc-launcher-compromise-put-players-passwords-and-personal-files-at-risk) on Nov 5 (22:07). It summarises the incident, cites the community report for what the malware could do, and repeats the publisher's steps with a few general tips. It is not an independent analysis | Nov 6, 02:30 |
-| Stolen data being misused | No public report found in the community comments (243 by Nov 6; absence of reports, not proof). The publisher says only that PCs and accounts may have been exposed | Nov 6, 02:07 |
-| Attacker's server | The registrar suspended `insightjs.com` on Nov 5 at 02:05 GMT and confirmed by email at 06:38 GMT that it reviewed our abuse report and suspended the domain under its terms of service (case 53615760). The registry shows a client hold and the name servers point to its suspension pages, and the names no longer resolve in public DNS (our checks, 10:33 GMT). This does not clean PCs that are already infected, and the attacker could use another domain. The host, 1984 ehf, told us it shut down a server (not named). Abuse reports to the host and the registrar were filed on Nov 4 (ANALYSIS row 31). Still suspended on Nov 6 | Nov 6, 02:07 |
+| Stolen data being misused | No public report found in the community comments (244 by Nov 6; absence of reports, not proof). The publisher says only that PCs and accounts may have been exposed | Nov 6, 02:55 |
+| Attacker's server | The registrar suspended `insightjs.com` on Nov 5 at 02:05 GMT and confirmed by email at 06:38 GMT that it reviewed our abuse report and suspended the domain under its terms of service (case 53615760). The registry shows a client hold and the name servers point to its suspension pages, and the names no longer resolve in public DNS (our checks, 10:33 GMT). This does not clean PCs that are already infected, and the attacker could use another domain. The host, 1984 ehf, told us it shut down a server (not named). Abuse reports to the host and the registrar were filed on Nov 4 (ANALYSIS row 31). Still suspended on Nov 6 | Nov 6, 03:02 |
 
 ## Contents
 
@@ -55,19 +57,21 @@ Why Sep 27? The publisher says `insightjs.com` was taken over that day and four 
 
 ## 2. What to do now (official guidance)
 
-From Level Infinite's follow-up measures notice (read in the Korean original, the wording below is ours), its English apology and its manual check guide:
+From Level Infinite's follow-up measures notice (read in the Korean original, and on Nov 6 in its English version), its apology and its manual check guide. The wording below is ours:
 
 - **Who should check:** anyone who started the PC launcher at least once after Sep 27, 06:41 GMT (15:41 JST). The incident was limited to the PC launcher, so players who only played on mobile need to do nothing.
 - **Official scan:** from Nov 5, 08:00 JST (Nov 4, 23:00 GMT) the official PC client scans for the malware and removes it. Close Chrome and other browsers first, then start the client. If something is found, a popup asks whether to remove the malware's logs, DLLs and registry data, and agreeing deletes them. If a browser was still open, some DLL files may stay, but they no longer run. No popup means nothing was found. The publisher admits the popup is not polished yet, and calls this security feature ACE. SHIFT UP's Kim Hyung-tae adds that the launcher was updated so that a scanning tool checks security at launch.
 - **Manual check** (no launcher installed, or you prefer to check by hand): the publisher's manual guide is out ([English post](https://x.com/NIKKE_en/status/2118118928631451774), steps on the [official page](https://nikke-en.com/newsdetail.html?content_id=ecdccd40a55a5a46aaa9abda64d436082db7)). The steps are in section 3.
 - **Account protection** (from another device, or after the PC check): change the passwords of accounts you used on that PC, and revoke and reissue any API keys and access tokens you used or stored on it.
-- **Losses outside the game** (accounts, money): contact the official in-game Customer Support, which promises to review each case. Keep records, and see "Report a loss outside the game" in section 4.
+- **Losses and damage:** the publisher says the incident may have affected not only your gameplay but also your PC, your accounts with other services and your personal assets. If you think you were affected or lost something, contact the official in-game Customer Support, which says it will review each case and respond. Keep records, and see "Report a loss outside the game" in section 4.
+- **Compensation:** the apology announces in-game compensation for all players. The notices do not say what it contains, or how losses outside the game will be assessed.
+- **Prevention:** the publisher says it will strengthen security monitoring of the launcher, add an integrity check for the external resources the launcher loads, and run each launcher feature with only the permissions it needs. No dates are given.
 - **The launcher:** the apology says the currently distributed version is safe to use. Our own checks agree that the official files are clean (section 6).
 - **No Windows reinstall is asked for.** None of the publisher's notices we read asks players to reinstall or reset Windows. Its steps are the removal, antivirus and account steps above and in section 3.
 - **Our note, not an official step:** the official scan deletes what it finds, and `debug.log` sits in the NIKKE folder, so deleting that folder deletes it too. If you want a record of the evidence, copy `Launcher\intl_service\debug.log` first.
 - **Do not run "fix" tools from anyone**, including strangers on social media (section 8).
 
-Sources: [English apology](https://x.com/NIKKE_en/status/2118116340225732677), [Korean follow-up measures notice](https://x.com/NIKKE_kr/status/2118117786568560774) (links to the official page on nikke-kr.com), [manual check guide, English post](https://x.com/NIKKE_en/status/2118118928631451774).
+Sources: [English apology](https://x.com/NIKKE_en/status/2118116340225732677) (full text on the [official page](https://nikke-en.com/newsdetail.html?content_id=3a94ebf0ab6c5a4703aa87aa57d0b8cd3d4b)), [Korean follow-up measures notice](https://x.com/NIKKE_kr/status/2118117786568560774) (links to the official page on nikke-kr.com) and its [English version](https://nikke-en.com/newsdetail.html?content_id=b4f23938a63a0a4e68aa577af395b1edb172), [manual check guide, English post](https://x.com/NIKKE_en/status/2118118928631451774).
 
 ## 3. Check your PC by hand (official steps)
 
@@ -96,7 +100,7 @@ If you still see unusual activity after all steps, contact the official Customer
 
 **Our note, not an official step:** if `debug.log` does not exist (for example after an uninstall), the official page does not say what to do. You can still look for the registry entry and the DLL folder (step 3, items 1 and 3) and delete the `tbs_cache` folder (item 5).
 
-**Prefer a script?** [`Check-NikkeLauncher.ps1`](Check-NikkeLauncher.ps1) checks the log, the registry key and the DLL folder, plus a few extras. It is plain PowerShell, offline and read-only, and short enough to read in five minutes. Read it first. Do not run scripts you have not read, including this one. It is our own helper, not an official tool: the official scan and the manual steps above come first. The community report links its author's own scanner. We have not reviewed its current release, and we do not recommend it over the official scan. The only review published here covers v0.4.0 ([community/](community/README.md)).
+**Prefer a script?** [`Check-NikkeLauncher.ps1`](Check-NikkeLauncher.ps1) looks for the indicators of the official guide (the `k2f_chan` line, the registry key, the DLL folder and the 205,135-byte `tinyget` log), plus a few extras from the community report, and its result uses the rows of section 4. It only reads: it deletes nothing, so remove what it finds with the official scan or step 3. It is plain PowerShell, offline, and short enough to read in five minutes. Read it first. Do not run scripts you have not read, including this one. It is our own helper, not an official tool: the official scan and the manual steps above come first. The community report links its author's own scanner. We have not reviewed its current release, and we do not recommend it over the official scan. The only review published here covers v0.4.0 ([community/](community/README.md)).
 
 ```
 powershell -NoProfile -ExecutionPolicy Bypass -File .\Check-NikkeLauncher.ps1
@@ -117,25 +121,17 @@ From the publisher's notice (step 4 of section 3):
 
 1. **From another device**, change the passwords of the accounts you used on that PC. Start with NIKKE / Level Infinite, then email and everything else you used there.
 2. **Revoke and reissue** the API keys and access tokens you used or stored on that PC.
-3. **Losses outside the game:** contact the official in-game Customer Support.
+3. **If you lost something** (accounts with other services, money or other assets): contact the official in-game Customer Support, which says it reviews each case.
 
 General advice, not from the notice: turn on 2FA, sign out of all sessions, look at the recent-activity pages of your important accounts for logins you do not recognise, and treat crypto wallets and SSH keys that were on that PC as exposed. If a wallet's recovery phrase may have been on that PC, move the funds to a new wallet with a new recovery phrase, from a clean device (Malwarebytes gives the same advice).
 
 ### Report a loss outside the game
 
-Our note, not an official step. The publisher asks players with losses outside the game to contact Customer Support. If you lost money, or someone used your accounts or identity:
+Our note, not an official step. The publisher asks anyone who thinks they were affected or lost something to contact Customer Support, and says it will review each case. If you lost money, or someone used your accounts or identity:
 
 1. **Customer Support first**, as the publisher asks. Keep the ticket number and the replies.
 2. **Keep records:** dates, screenshots, account alerts, bank statements, and your launcher logs (`debug.log`), unchanged and private. Do not hand personal information to people who offer help.
-3. **Report it to the police or the national cybercrime unit in your country.** What they ask for differs by country.
-
-Checked so far (we add a country only after reading its official site):
-
-| Country | Where to report | Checked |
-|---|---|---|
-| Canada | Your local police, and the RCMP National Cybercrime Coordination Centre (NC3) with the Canadian Anti-Fraud Centre through their online reporting system ([reportcyberandfraud.canada.ca](https://reportcyberandfraud.canada.ca/)) or by phone at 1-888-495-8501. Source: [RCMP page](https://www.rcmp.ca/en/specialized-operations-and-intelligence/national-cybercrime-coordination-centre) | Nov 6 |
-
-Do you know how reporting works in your country? Volunteers are collecting this: [community call](https://x.com/SpringZ_FSG/status/2118514199269720277).
+3. **Report it to your local police or cybercrime unit** if money was taken or your accounts or identity were misused.
 
 ### What about reinstalling Windows?
 
@@ -169,10 +165,11 @@ Short replies for people asking in threads and chats. Each one fits in a post.
 - **"Can I just reinstall it to remove the malware?"** Not by itself: the items to delete (the registry key and the Chrome DLL folder) sit outside the NIKKE folder. Check by hand first, as the official guide describes. https://github.com/SpringZali/nikke-launcher-triage
 - **"Can a System Restore fix it?"** We would not rely on it. The publisher's steps are to delete specific items and scan. https://github.com/SpringZali/nikke-launcher-triage
 - **"Does Malwarebytes remove it?"** Malwarebytes' own article mentions only detections reported by users. A scan can remove leftovers, but it cannot undo anything already copied, and a clean scan does not prove that nothing happened. Follow the official steps and change passwords from a clean device. https://github.com/SpringZali/nikke-launcher-triage
+- **"Will players get compensation?"** Level Infinite says it has prepared in-game compensation for all players, without details so far. If you lost something outside the game, contact Customer Support, which says it reviews each case, and keep records. https://github.com/SpringZali/nikke-launcher-triage
 
 ## 6. What is known, and how well
 
-**VERIFIED** = reproduced from a public source, or read at the source. **CORROBORATED** = several independent reports agree. **REPORTED** = one source. **UNOFFICIAL** = a claim or advice from the community report that the publisher does not make. Full table with 36 claims and how to reproduce each: [ANALYSIS.md](ANALYSIS.md).
+**VERIFIED** = reproduced from a public source, or read at the source. **CORROBORATED** = several independent reports agree. **REPORTED** = one source. **UNOFFICIAL** = a claim or advice from the community report that the publisher does not make. Full table with 39 claims and how to reproduce each: [ANALYSIS.md](ANALYSIS.md).
 
 **From the publisher**
 
@@ -184,6 +181,8 @@ Short replies for people asking in threads and chats. Each one fits in a post.
 | The official PC client scans for and removes the malware from Nov 4, 23:00 GMT | **REPORTED** by the publisher | The notice. Not tested here, on purpose |
 | The manual check: `k2f_chan registered` in `debug.log`, a registry key, a Chrome DLL folder, a 205,135-byte `tinyget` log, `tbs_cache`, an antivirus scan | **VERIFIED** (read at the source) | The [English post](https://x.com/NIKKE_en/status/2118118928631451774) and the official page it links |
 | Timeline: `insightjs.com` taken over Sep 27, malware distributed to PCs from Oct 29, 18:52 GMT | **REPORTED** by the publisher | The notice. The dates fit our registry and file checks |
+| In-game compensation for all players; anyone affected, including losses to accounts with other services or personal assets, should contact Customer Support, which reviews each case | **VERIFIED** (read at the source). What the compensation contains and how losses are assessed: not stated | The [English apology](https://nikke-en.com/newsdetail.html?content_id=3a94ebf0ab6c5a4703aa87aa57d0b8cd3d4b) and [follow-up notice](https://nikke-en.com/newsdetail.html?content_id=b4f23938a63a0a4e68aa577af395b1edb172), ANALYSIS row 38 |
+| Plans to prevent a repeat: stronger security monitoring of the launcher, an integrity check for the external resources it loads, minimum permissions for each launcher feature | **REPORTED** by the publisher (plans, no dates) | The English follow-up notice, ANALYSIS row 39 |
 
 **From our own checks of public data**
 
@@ -208,7 +207,7 @@ Short replies for people asking in threads and chats. Each one fits in a post.
 | The malicious program is a remote-control agent that can run commands, read files, take screenshots and collect saved credentials | **REPORTED**, **UNOFFICIAL** | Static analysis by one private individual, not verified here. The publisher says only "malicious programs" |
 | The Chrome-helper persistence is not on every infected PC | **REPORTED** | Victims' comments. The publisher's guide lists the registry key and the DLL as traces to look for |
 | Reinstalling Windows is the only certain fix | **UNOFFICIAL** | The report's author. The publisher does not say so |
-| Stolen data is being misused | **NO REPORTS FOUND** | Keyword scan of the report's comments (243 by Nov 6, 02:07 GMT; new comments read one by one) |
+| Stolen data is being misused | **NO REPORTS FOUND** | Keyword scan of the report's comments (244 by Nov 6, 02:55 GMT; new comments read one by one) |
 | One detailed community case study also found no proof of theft or misuse | **REPORTED** | [Community report](community/INCIDENT_FORENSIC_REPORT_PUBLIC.md) |
 | How the attacker got write access to the CDN | **UNKNOWN** | Not yet explained |
 
@@ -258,11 +257,11 @@ A "NIKKE virus remover", a "launcher fixer", an `.exe` or `.zip` "cleanup tool",
 Level Infinite's apology and follow-up notice (Nov 4, 23:00 to 23:11 GMT) answer several earlier points: the current launcher version is called safe, there is an official scan and a manual check guide, and there is advice on passwords, API keys and tokens. Still open:
 
 1. **Scope:** the notice says the scope of damage is still being investigated. Which launches, regions and dates were affected is not stated, and neither is whether player credentials were actually taken.
-2. **How the CDN was accessed**, and confirmation that other files and buckets were checked. The notice says the network security environment, including the CDN, is being reviewed.
+2. **How the CDN was accessed**, and confirmation that other files and buckets were checked. The notice says the network security environment, including the CDN, is being reviewed. Its English version lists plans to prevent a repeat (stronger monitoring, an integrity check for external resources, minimum permissions), but still does not say how the files were changed.
 3. **What the official scan does and does not remove.** The notice names logs, DLL files and registry data. It does not say how complete the removal is.
 4. **A forced cache reset** in the launcher update is not mentioned, but the manual guide tells you to delete `tbs_cache` yourself.
 5. **A way to tell** whether an account's sessions were used abnormally.
-6. **How claims for real losses are assessed.** The notice announces in-game compensation and refers losses outside the game to Customer Support, but does not say how those claims are evaluated.
+6. **How claims for real losses are assessed.** The notices announce in-game compensation for all players without saying what it contains, and ask players with losses (accounts with other services, personal assets) to contact Customer Support, which reviews each case. They do not say how those claims are evaluated or what can be compensated.
 
 ## 10. Unofficial extras from the community report
 
@@ -280,6 +279,7 @@ These come from a community report written by a private individual and from comm
 
 ## Changelog
 
+- **2026-11-06, 03:04, v3.3.** Read Level Infinite's English notices on the official site in full. Added what they say about compensation and losses (in-game compensation for all players, contents not stated; anyone affected, including losses to accounts with other services or personal assets, should contact Customer Support, which reviews each case) and the publisher's plans to prevent a repeat: in the note at the top, the status board, sections 2, 4, 6 and 9, and a new short answer. Section 4 keeps the general steps for reporting a loss, and the table by country was removed. `Check-NikkeLauncher.ps1` now looks for the indicators of the official guide, including the 205,135-byte `tinyget` log, and its result uses the rows of section 4 instead of the old colours. The community notes no longer refer to the old colour rows. ANALYSIS: rows 38 and 39 are new, rows 22, 29, 33 and 34 updated. Status board refreshed: no new statement from the publisher, CDN files clean, attacker's domain still suspended, no misuse reports found.
 - **2026-11-06, 02:40, v3.2.** Malwarebytes published a news article on Nov 5 (22:07 GMT). Added it to the note at the top, the status board, section 6, the timeline and the sources. It cites the community report for the technical details, so the report's claims stay unconfirmed. Added "Report a loss outside the game" to section 4 (Customer Support first, keep records, police or national cybercrime unit, with Canada as the first checked country), a wallet tip, a short answer about Malwarebytes, a note to keep logs private (tip at the top and section 8), and an open question on how real losses are assessed (section 9). Refreshed the status board: no new publisher statement, CDN files clean, domain still suspended, no misuse reports found. ANALYSIS: row 37 is new, rows 12, 21 and 22 and the source notes updated.
 - **2026-11-05, 10:33, v3.1.** The registrar suspended `insightjs.com` on Nov 5 at 02:05 GMT (registry status client hold, name servers changed to its suspension pages, the names no longer resolve) and confirmed by email at 06:38 GMT that it acted on our abuse report. Updated the status board, the timeline and the table in section 6, and ANALYSIS rows 2, 5 and 31. Nothing else changed: the official scan and the manual check are still the way to clean a PC.
 - **2026-11-05, 00:15, v3.0.** The guide now follows the publisher's guidance first, and treats the community report as an unofficial, unconfirmed source. Sections 1 to 6 were rewritten around the official scan and the official manual check. Section 3 follows the official page step by step, and was checked against it after the rewrite. The green, yellow, grey and red triage was replaced by "found" and "not found, or you cannot check". The end of the exposure window (Nov 4, 03:20 GMT, from the report) was dropped in favour of the publisher's "after Sep 27". The advice to reinstall Windows, the SRUM and blocking notes and the recommendation of the report author's scanner were removed from the README (the report's claims stay in ANALYSIS with their status). Community extras moved to the new section 10. The link to the Russian translation of the report was fixed.
@@ -299,12 +299,11 @@ These come from a community report written by a private individual and from comm
 ## Sources and credit
 
 - Official notices, Nov 4: [NIKKE English account](https://x.com/NIKKE_en/status/2117817602659770434) (03:13 GMT) and [NIKKE Japan account](https://x.com/NIKKE_japan/status/2117817740555956289) (03:14 GMT)
-- Level Infinite's apology and follow-up measures notice, Nov 4: [English apology](https://x.com/NIKKE_en/status/2118116340225732677) (23:01 GMT), [Korean follow-up measures notice](https://x.com/NIKKE_kr/status/2118117786568560774) (23:06 GMT), which links to the official page on nikke-kr.com
+- Level Infinite's apology and follow-up measures notice, Nov 4: [English apology](https://x.com/NIKKE_en/status/2118116340225732677) (23:01 GMT), [Korean follow-up measures notice](https://x.com/NIKKE_kr/status/2118117786568560774) (23:06 GMT), which links to the official page on nikke-kr.com. English versions on the official site, read in full on Nov 6: [apology](https://nikke-en.com/newsdetail.html?content_id=3a94ebf0ab6c5a4703aa87aa57d0b8cd3d4b) and [follow-up measures](https://nikke-en.com/newsdetail.html?content_id=b4f23938a63a0a4e68aa577af395b1edb172)
 - Level Infinite's manual security check guide, Nov 4: [English post](https://x.com/NIKKE_en/status/2118118928631451774) (23:11 GMT, steps on nikke-en.com) and the [Korean post](https://x.com/NIKKE_kr/status/2118118725518086221) (23:10 GMT). SHIFT UP's Kim Hyung-tae on the launcher update: [post](https://x.com/jamm3rd/status/2118119533282279671) (23:13 GMT)
 - [Kim Hyung-tae of SHIFT UP, statement of Nov 4](https://x.com/jamm3rd/status/2117891546322252242) (08:07 GMT)
 - Security vendor coverage: [Malwarebytes, "NIKKE PC launcher compromise put players' passwords and personal files at risk"](https://www.malwarebytes.com/blog/news/2026/11/nikke-pc-launcher-compromise-put-players-passwords-and-personal-files-at-risk) (Nov 5, 22:07 GMT)
-- Reporting in Canada: [RCMP National Cybercrime Coordination Centre](https://www.rcmp.ca/en/specialized-operations-and-intelligence/national-cybercrime-coordination-centre), pointed out by [@Weevil2077](https://x.com/Weevil2077/status/2118526128113795148)
-- [Inven Global](https://www.invenglobal.com/articles/28112/goddess-of-victory-nikke-pc-launcher-allegedly-compromised) and Japanese coverage: [Inside Games](https://www.inside-games.jp/article/2026/11/04/190338.html), [Mynavi](https://news.mynavi.jp/article/20261104-5254830/), [Automaton](https://automaton-media.com/articles/newsjp/20261104-477333/)
+- [Inven Global](https://www.invenglobal.com/articles/28112/goddess-of-victory-nikke-pc-launcher-allegedly-compromised) and its [report on the apology](https://www.invenglobal.com/articles/28158/level-infinite-apologizes-for-nikke-pc-launcher-issue-accepts-reports-of-secondary-damages), and Japanese coverage: [Inside Games](https://www.inside-games.jp/article/2026/11/04/190338.html), [Mynavi](https://news.mynavi.jp/article/20261104-5254830/), [Automaton](https://automaton-media.com/articles/newsjp/20261104-477333/)
 - **Community report (unofficial, not confirmed by the publisher):** [MotherSphere's report](https://gist.github.com/MotherSphere/d6c049a09ba8ac3085c51ee9df24a4e5) and the players who shared their logs and network records in its comments. We used it for leads and for public timestamps that we then rechecked ourselves (see [ANALYSIS.md](ANALYSIS.md)). The report is also available in 15 languages, including [Russian](https://gist.github.com/MotherSphere/d14e29000f8ad9a82af479e8ed7fa958). We have not checked the translations.
 - **Review, feedback and community reports:** [Necromancer](https://github.com/necromancer124), a community member who is learning IT, reviewed the draft, suggested the log-tampering caveat and contributed two reports, published unchanged in [community/](community/README.md) (not verified here).
 

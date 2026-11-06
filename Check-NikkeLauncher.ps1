@@ -3,13 +3,16 @@
   Read-only self-check for the NIKKE PC launcher incident (November 2026).
 
 .DESCRIPTION
-  Looks for the public indicators of compromise described in MotherSphere's report
-  (https://gist.github.com/MotherSphere/d6c049a09ba8ac3085c51ee9df24a4e5)
-  and prints a plain-language result.
+  Looks for the indicators in the publisher's manual check guide for the PC launcher
+  (README.md, section 3): the "k2f_chan" line in debug.log, the HKCU registry key, the
+  Chrome-folder DLL and the 205,135-byte tinyget log. It also looks for a few extras from
+  MotherSphere's community report (https://gist.github.com/MotherSphere/d6c049a09ba8ac3085c51ee9df24a4e5).
+  It prints a plain-language result that uses the rows of README.md, section 4.
 
   What this script does NOT do:
     - It never connects to the internet.
-    - It never changes, deletes, moves or uploads anything. It only reads.
+    - It never changes, deletes, moves or uploads anything. It only reads, so it does not
+      remove anything either: use the official scan or README.md, section 3, step 3.
     - It never prints file contents, passwords, your computer name or the agent ID.
       It prints yes/no results, counts, dates and paths (your user name is hidden).
     - It cannot prove that a PC is clean. Missing evidence is not proof.
@@ -27,8 +30,8 @@ param([string]$InstallPath)
 
 $ErrorActionPreference = 'SilentlyContinue'
 
-$red    = New-Object System.Collections.Generic.List[string]   # the agent ran or left something behind
-$yellow = New-Object System.Collections.Generic.List[string]   # only the first stage (the loader) left traces
+$found  = New-Object System.Collections.Generic.List[string]   # signs that the malicious program ran or left something behind
+$extras = New-Object System.Collections.Generic.List[string]   # first-stage traces from the community report, not in the official guide
 $notes  = New-Object System.Collections.Generic.List[string]   # context
 
 function Say([string]$Text, [string]$Color = 'Gray') { Write-Host $Text -ForegroundColor $Color }
@@ -80,7 +83,7 @@ Say ('Run on ' + (Get-Date -Format 'yyyy-MM-dd HH:mm') + ' local time.')
 Say ''
 
 if (Get-Process | Where-Object { $_.Name -match '^(nikke_launcher|tbs_browser)' }) {
-    $notes.Add('The launcher is running right now. Close it first: the agent only works while the launcher is open.')
+    $notes.Add('The launcher is running right now. Close it, the game and Chrome first, as the publisher''s guide asks.')
 }
 
 # ---- 1. launcher folders and logs ---------------------------------------------------------
@@ -114,7 +117,7 @@ $launcherDirs = @($launcherDirs | Sort-Object -Unique)
 $logFound = $false
 $coverage = 'n/a'
 $logStartsLate = $false
-$k2fHits = 0; $agentStateHits = 0; $loaderHits = 0
+$k2fHits = 0; $agentStateHits = 0; $loaderHits = 0; $tinygetHits = 0
 $skipExt = '.dll', '.exe', '.png', '.jpg', '.jpeg', '.ttf', '.pak', '.mp4'
 foreach ($ld in $launcherDirs) {
     Say ('     launcher folder: ' + (Hide-Identity $ld))
@@ -129,6 +132,10 @@ foreach ($ld in $launcherDirs) {
             $coverage = '{0}-{1} to {2}-{3} (month-day, the log has no year)' -f $a.Substring(0, 2), $a.Substring(2, 2), $b.Substring(0, 2), $b.Substring(2, 2)
             if ([int]$a -gt 1023 -and [int]$a -le 1104) { $logStartsLate = $true }
         }
+    }
+    # The publisher's guide: a tinyget log of exactly 205,135 bytes is the downloaded file.
+    foreach ($f in (Get-ChildItem -LiteralPath (Join-Path $ld 'log\tinyget') -File -Filter 'tinyget.*.log')) {
+        if ($f.Length -eq 205135) { $tinygetHits++ }
     }
     # Scan every file in the Launcher folder, so other log layouts are covered too.
     foreach ($f in (Get-ChildItem -LiteralPath $ld -Recurse -File -Force | Where-Object { $_.Length -lt 300MB -and $skipExt -notcontains $_.Extension.ToLower() })) {
@@ -157,8 +164,8 @@ foreach ($sd in $stateDirs) {
 }
 if ($stateDirs.Count -eq 0) { Say '     no nikke_launcher data folder found' }
 
-# ---- 3. Windows persistence described in the report ---------------------------------------------
-Say '3/5  Checking for the Windows persistence described in the report...'
+# ---- 3. registry key and DLL folder from the publisher's guide -------------------------------------
+Say '3/5  Checking the registry key and the DLL folder from the publisher''s guide...'
 $clsidPresent = Test-Path 'HKCU:\Software\Classes\CLSID\{E77CC89B-7401-4C04-8CED-149DB35ADD04}'
 $peh = Join-Path $env:LOCALAPPDATA 'Google\Chrome\User Data\PlatformExperienceHelper'
 $dllFolders = @(Get-ChildItem -LiteralPath $peh -Directory | Where-Object {
@@ -172,15 +179,19 @@ $conns = @(Get-NetTCPConnection | Where-Object { $badIps -contains $_.RemoteAddr
 $dnsHits = @(Get-DnsClientCache | Where-Object { $_.Entry -match 'insightjs' })
 $hostsHits = @(Select-String -Path (Join-Path $env:SystemRoot 'System32\drivers\etc\hosts') -Pattern 'insightjs')
 
-# ---- 5. verdict ----------------------------------------------------------------------------------
+# ---- 5. result -----------------------------------------------------------------------------------
 Say '5/5  Working out the result...'
-if (($k2fHits + $stateAgentHits) -gt 0) { $red.Add("'k2f_chan' / 'k2f.agent' found in launcher files ($($k2fHits + $stateAgentHits) file(s)). The report says this means the agent ran.") }
-if ($agentStateHits -gt 0)              { $red.Add("The agent's saved state ('k2f.agent') was found in $agentStateHits file(s).") }
-if ($clsidPresent)                      { $red.Add('The HKCU registry key {E77CC89B-7401-4C04-8CED-149DB35ADD04} exists. (Only the HKCU copy is suspicious; the HKLM copy is normal Windows.)') }
-if ($dllFolders.Count -gt 0)            { $red.Add("$($dllFolders.Count) folder(s) with platform_experience_helper.dll under Chrome's PlatformExperienceHelper.") }
-if ($conns.Count -gt 0)                 { $red.Add('This PC has a live connection to a known attacker IP address right now.') }
-if (($loaderHits + $stateLoaderHits) -gt 0) { $yellow.Add("Traces of 'insightjs' in launcher files or cache ($($loaderHits + $stateLoaderHits) file(s)). That is the first stage (the loader).") }
-if ($dnsHits.Count -gt 0)               { $yellow.Add("This PC looked up 'insightjs' recently ($($dnsHits.Count) DNS cache entries).") }
+# Indicators from the publisher's manual check guide
+if ($k2fHits -gt 0)                     { $found.Add("'k2f_chan' found in $k2fHits launcher file(s). The publisher's guide says a malicious program may have run.") }
+if ($clsidPresent)                      { $found.Add('The HKCU registry key {E77CC89B-7401-4C04-8CED-149DB35ADD04} exists. (Only the HKCU copy counts; the HKLM copy is normal Windows.)') }
+if ($dllFolders.Count -gt 0)            { $found.Add("$($dllFolders.Count) folder(s) with platform_experience_helper.dll under Chrome's PlatformExperienceHelper.") }
+if ($tinygetHits -gt 0)                 { $found.Add("$tinygetHits file(s) of exactly 205,135 bytes in Launcher\log\tinyget.") }
+# Extras from the community report that also mean the program ran
+if (($agentStateHits + $stateAgentHits) -gt 0) { $found.Add("The program's saved state ('k2f.agent' or 'k2f_chan') in launcher files or saved data ($($agentStateHits + $stateAgentHits) file(s)). From the community report, not in the official guide.") }
+if ($conns.Count -gt 0)                 { $found.Add('This PC has a live connection to a known attacker IP address right now.') }
+# First-stage traces (community report)
+if (($loaderHits + $stateLoaderHits) -gt 0) { $extras.Add("'insightjs' in launcher files or cache ($($loaderHits + $stateLoaderHits) file(s)): the modified script was loaded (first stage).") }
+if ($dnsHits.Count -gt 0)               { $extras.Add("This PC looked up 'insightjs' recently ($($dnsHits.Count) DNS cache entries).") }
 if ($hostsHits.Count -gt 0)             { $notes.Add('Your hosts file mentions insightjs (expected if you blocked it yourself).') }
 if ($logFound -and $logStartsLate)      { $notes.Add("Your debug.log starts after Oct 23 ($coverage), so earlier launches are not covered by it.") }
 
@@ -188,27 +199,33 @@ $noEvidence = (-not $logFound) -and ($stateDirs.Count -eq 0)
 
 Say ''
 Say '==================== RESULT ====================' 'Cyan'
-if ($red.Count -gt 0) {
-    Say 'RED - signs that the remote-control agent ran or left something behind' 'Red'
-    $red | ForEach-Object { Say ('  - ' + $_) 'Red' }
+if ($found.Count -gt 0) {
+    Say 'FOUND - signs that the malicious program ran or left something behind' 'Red'
+    $found | ForEach-Object { Say ('  - ' + $_) 'Red' }
     Say ''
-    Say 'Do not delete anything yet. Close the launcher. From ANOTHER device, change your passwords and' 'Yellow'
-    Say 'sign out of all sessions. Then follow the RED row of the triage table in README.md.' 'Yellow'
-} elseif ($yellow.Count -gt 0) {
-    Say 'YELLOW - traces of the first stage (the loader), but no sign the agent ran' 'Yellow'
-    $yellow | ForEach-Object { Say ('  - ' + $_) 'Yellow' }
-    Say ''
-    Say 'Follow the YELLOW row of the triage table in README.md. This is not proof the agent did not run.'
+    Say 'Follow the "Found" row in README.md, section 4:' 'Yellow'
+    Say '  1. If you want a record, copy Launcher\intl_service\debug.log first and keep the copy private.' 'Yellow'
+    Say '  2. Remove it: accept the removal the official scan offers, or follow section 3, step 3.' 'Yellow'
+    Say '  3. From another device, change your passwords and revoke API keys and tokens (section 4).' 'Yellow'
+    Say '  4. Update your antivirus, then run a full scan and a Windows Security Offline Scan (section 3, step 5).' 'Yellow'
 } elseif ($noEvidence) {
-    Say 'GREY - cannot tell: the evidence this check relies on is not here' 'DarkYellow'
+    Say 'CANNOT CHECK - the files this check relies on are not here' 'DarkYellow'
     Say '  The launcher data and debug.log are missing. That is what you see after an uninstall or reinstall'
     Say '  (the uninstaller deletes them), or if the launcher was never installed for this Windows user.'
-    Say '  No persistence or live connection was found either, which is good, but it is not proof.'
+    Say '  No registry key, DLL folder or live connection was found either, which is good, but it is not proof.'
     Say ''
-    Say '  If you ran the launcher between Sep 27 and Nov 3, follow the GREY row of the triage table in README.md.'
+    Say '  If you started the PC launcher after Sep 27, 06:41 GMT, follow the "Cannot check" row in README.md, section 4.'
 } else {
-    Say 'GREEN - no sign found in the evidence that exists' 'Green'
-    Say '  This does not prove the PC is clean. Look at the log coverage below and compare it with the days you played.'
+    Say 'NOT FOUND - none of the official indicators is on this PC' 'Green'
+    Say '  The publisher says that not finding the string does not completely rule out risk. Update your antivirus,'
+    Say '  run a full scan and a Windows Security Offline Scan, and protect your accounts if you started the PC'
+    Say '  launcher after Sep 27, 06:41 GMT (the "Not found" row in README.md, section 4).'
+    Say '  Look at the log coverage below and compare it with the days you played.'
+}
+if ($extras.Count -gt 0) {
+    Say ''
+    Say 'Also seen (community report, not in the official guide):' 'Yellow'
+    $extras | ForEach-Object { Say ('  - ' + $_) 'Yellow' }
 }
 if ($notes.Count -gt 0) { Say ''; $notes | ForEach-Object { Say ('Note: ' + $_) } }
 
@@ -219,6 +236,7 @@ $rows = @(
     @('debug.log found',                  $(if ($logFound) { 'yes' } else { 'no' })),
     @('debug.log coverage',               $coverage),
     @("'k2f_chan' file hits",             ($k2fHits + $stateAgentHits)),
+    @('205,135-byte tinyget logs',        $tinygetHits),
     @("'k2f.agent' file hits",            $agentStateHits),
     @("'insightjs' file hits",            ($loaderHits + $stateLoaderHits)),
     @('nikke_launcher data folder',       $(if ($stateDirs.Count -gt 0) { 'yes' } else { 'no' })),
