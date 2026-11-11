@@ -21,7 +21,7 @@ Two reports prepared by a community member, [Necromancer](https://github.com/nec
 
 ## What the scanner review adds, and its limits
 
-The review concludes that v0.4.0 of the scanner is a genuine local scanner with no malicious behaviour found, with "moderately high" confidence for that exact version. It lists its own negatives: the executable is unsigned, the repository was new, and the build could not be reproduced.
+The review concludes that v0.4.0 of the scanner is a genuine local scanner with no malicious behaviour found, with "moderately high" confidence for that exact version. It lists its own negatives: the executable is unsigned, the repository was new, and a local reproducible build with a byte comparison was not completed (Cargo was unavailable).
 
 **This guide does not ask you to run any executable.** If you choose to use any tool, verify its hash against the publisher's, read the source if you can, and treat a clean result as limited.
 
@@ -32,7 +32,14 @@ We checked only public metadata through the GitHub API on 2026-11-04. We did not
 - The repository `MotherSphere/NIKKE-Launcher-Check` exists, was created on Nov 3 (very new) and is licensed GPL-3.0.
 - Release v0.4.0 points at commit `0bc79c9`, which GitHub marks as signature-verified. The tag points at the same commit.
 - GitHub lists the Windows asset's SHA-256 digest as `152199a0afaa483e1a6b9b27a6568731760867022078aa85a075064a7f1d314f`, which equals the value the review gives.
-- The repository has **newer commits than v0.4.0** (Nov 4, 11:26 GMT). According to their commit messages, they change how the scanner reads compressed LevelDB data and which downloads it counts. The review does not cover them. As of Nov 4, 16:03 GMT the latest release is v0.5.1 (published 13:39 GMT, after v0.4.1 and v0.5.0), and MotherSphere's report now links the scanner at the top. On Nov 6 at 02:55 GMT the latest release was v0.5.2 (published Nov 4, 22:40 GMT). The review covers none of those releases.
+- The repository has **newer commits than v0.4.0** (Nov 4, 11:26 GMT). According to their commit messages, they change how the scanner reads compressed LevelDB data and which downloads it counts. The review does not cover them. As of Nov 4, 16:03 GMT the latest release is v0.5.1 (published 13:39 GMT, after v0.4.1 and v0.5.0), and MotherSphere's report now links the scanner at the top. On Nov 6 at 02:55 GMT the latest release was v0.5.2 (published Nov 4, 22:40 GMT). On Nov 11 the latest release was v0.6.0 (published Nov 8, 00:07 GMT). The review covers none of the releases after v0.4.0.
 - The two reports match the manifest. The manifest does not cover the notes file: only its "SENDING" section was removed from this copy, nothing else in it was changed.
+
+## Corrections (Nov 11)
+
+The two reports are published unchanged, so that their SHA-256 values still match. Corrections therefore go here and not into the files. Both points come from the review by the write-up's author ([issue #1](https://github.com/SpringZali/nikke-launcher-triage/issues/1)), and their wording follows the review of that issue by Necromancer, who wrote the reports.
+
+- **Privileges** (`INCIDENT_FORENSIC_REPORT_PUBLIC.md`, "Potentially exposed data"). The report says that the agent ran with the permissions of the logged-in user. That is too narrow. The launcher (version 0.0.6.841, in use by Oct 29) asks for administrator rights when it starts (reported for version 0.0.6.841 in gist comment 6456301; we read the same `requireAdministrator` setting in the manifest of version 0.0.6.709), and the agent runs inside the launcher, so it can inherit elevated rights. Which account and which rights it had depends on how the elevation prompt was answered: if a standard user typed another account's administrator password, it ran as that account. Treat everything that this account and these rights could read as potentially exposed. This does not show that elevated rights were used on the PC in the report, or that anything was taken.
+- **Reproducible build** (the summary above, and `REPOSITORY_SECURITY_REVIEW_PUBLIC.md`, "Not included"). An earlier version of this page said that the build "could not be reproduced". The review did not attempt it: a local build and a byte comparison were not completed because Cargo was unavailable. Nothing in the review suggests a mismatch between the source and the released program.
 
 Found a problem? Open an issue with a source.
